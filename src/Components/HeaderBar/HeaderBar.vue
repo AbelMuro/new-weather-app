@@ -23,4 +23,16 @@
         height: 40px;
         object-fit: contain;
     }
+
+    @media(max-width: 1270px){
+        .header{
+            width: 90%;
+        }
+    }
+
+    @media(max-width: 600px){
+        .logo{
+            height: 33px;
+        }
+    }
 </style>

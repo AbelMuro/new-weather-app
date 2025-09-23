@@ -1,12 +1,14 @@
 <script setup>
     import SearchBar from './SearchBar';
     import WeatherSummary from './WeatherSummary';
+    import HourlyForecast from './HourlyForecast'; 
 </script>
 
 <template>
     <section class="grid">
         <SearchBar/>
         <WeatherSummary/>
+        <HourlyForecast/>
     </section>
 </template>
 

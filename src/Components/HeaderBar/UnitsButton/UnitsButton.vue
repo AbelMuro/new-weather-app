@@ -1,6 +1,7 @@
 <script setup>
     import {ref} from 'vue';
     import icons from './icons';
+    import globalIcons from '@/assets/icons'
     import {motion, AnimatePresence} from 'motion-v';
 
     const temp = ref('fahrenheit');
@@ -36,7 +37,7 @@
         <button class="units" @click="handleOpen">
             <img class="gear" :src="icons['gear']">
             Units
-            <img class="arrow" :src="icons['arrow']">
+            <img class="arrow" :src="globalIcons['arrow']">
         </button>
         <AnimatePresence>
             <motion.section 

@@ -1,0 +1,60 @@
+<script setup>
+    const {search} = defineProps({
+        search: String
+    })
+</script>
+
+<template>
+    <section class="queries" v-if="search">
+        <div class="queries_query">
+            City Name
+        </div>
+        <div class="queries_query">
+            City Name
+        </div>
+        <div class="queries_query">
+            City Name
+        </div>
+        <div class="queries_query">
+            City Name
+        </div>
+    </section>
+</template>
+
+<style scoped>
+    .queries{
+        position: absolute;
+        top: 70px;
+        left: 0px;
+        width: 526px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background-color: #262540;
+        border-radius: 12px;
+        border: 1px solid #3C3B5E;
+    }
+
+    .queries_query{
+        width: 100%;
+        height: 40px;
+        border-radius: 8px;
+        padding: 0px 10px;
+        color: white;
+        font-family: 'dm sans';
+        font-size: 1rem;
+        line-height: 120%;
+        font-weight: medium;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        border: 1px solid transparent;
+    }
+
+    .queries_query:hover{
+        border: 1px solid #3C3B5E;
+        background-color: #302F4A;
+    }
+
+</style>

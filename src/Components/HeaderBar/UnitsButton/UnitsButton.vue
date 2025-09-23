@@ -127,11 +127,16 @@
     }
 
     .units:hover{
-        background-color: #171727;
+        background-color: #302F4A;
     }
 
     .units:active{
-        background-color: rgb(9, 9, 15); 
+        background-color: #201f2e; 
+    }
+
+    .units:focus, .units:focus ~ .dropdown > .dropdown_header{
+        outline: 2px solid white;
+        outline-offset: 3px;
     }
 
     .gear{
@@ -159,21 +164,26 @@
         width: 214px;
         height: 440px;
         border: 1px solid #3C3B5E;
-        padding: 20px 15px;
+        padding: 10px;
         border-radius: 12px;
         background-color: #262540;
         transform-origin: top center;
     }
 
     .dropdown_header{
+        width: 100%;
+        height: 39px;
+        border-radius: 12px;
         color: white;
         font-family: 'dm sans';
         font-size: 1rem;
         line-height: 120%;
         font-weight: medium;
-        margin: 0px 0px 15px 0px;
+        margin: 0px 0px 5px 0px;
         padding: 0px 10px 0px 10px;
         text-align: left;
+        display: flex;
+        align-items: center;
     }
 
     .dropdown_title{

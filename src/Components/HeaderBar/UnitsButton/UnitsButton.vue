@@ -25,11 +25,6 @@
         open.value = !open.value;
     }
 
-    /* 
-        this is where i left off, i need to correct the hover states for the units button.
-        Then i can start displaying the title in the center of the document
-    */
-
 </script>
 
 <template>

@@ -4,6 +4,12 @@
     import HourlyForecast from './HourlyForecast'; 
     import WeatherDetails from './WeatherDetails';
     import DailyForecast from './DailyForecast';
+
+    /* 
+        this is where i left off, i was in the middle of making
+        the app responsive, i am currently in 900px
+    */
+
 </script>
 
 <template>

@@ -41,10 +41,13 @@
 
 <style scoped>
     .details_container{
+        width: 100%;
         display: flex;
+        flex-wrap: wrap;
         gap: 24px;
         grid-column: 1/2;
         grid-row: 3/4;
+        margin-bottom: 48px;
     }
 
     .details_detail{
@@ -76,6 +79,13 @@
         font-size: 2rem;
         line-height: 100%;
         font-weight: 300;
+        white-space: nowrap;
+    }
+
+    @media(max-width: 1270px){
+        .details_container{
+            gap: 12px;
+        }
     }
 
 </style>

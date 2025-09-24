@@ -170,6 +170,7 @@
         border-radius: 12px;
         background-color: #262540;
         transform-origin: top center;
+        z-index: var(--closest);
     }
 
     .dropdown_header{

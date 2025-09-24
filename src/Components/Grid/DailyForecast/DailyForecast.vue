@@ -1,7 +1,9 @@
 <script setup>
-    /* 
-        this is where i left off, i need to finish the styles for the .daily_weather element
-    */
+    import {ref} from 'vue';
+    import icons from '@/assets/icons';
+
+    const dailyWeather = ref(7);
+
 </script>
 
 <template>
@@ -9,27 +11,29 @@
         <h2 class="daily_title"> 
             Daily forecast
         </h2>
-        <article class="daily_weather">
-            <h3 class="daily_day">
-                Tue
-            </h3>
-            <img class="daily_icon">
-            <p class="daily_temp">
-                20°
-            </p>
-            <p class="daily_temp">
-                14°
-            </p>
-        </article>  
+        <div class="daily_list">
+            <article class="daily_weather" v-for="(day, _) in dailyWeather">
+                <h3 class="daily_day">
+                    Tue
+                </h3>
+                <img class="daily_icon" :src="icons['drizzle']">
+                <p class="daily_temp">
+                    20°
+                </p>
+                <p class="daily_temp">
+                    14°
+                </p>
+            </article>  
+        </div>
     </section>
 </template>
 
 <style scoped>
     .daily{
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        column-gap: 16px;
-        row-gap: 20px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
 
     .daily_title{
@@ -40,5 +44,70 @@
         color: white;
         font-family: 'dm sans';
         margin: 0px;
+    }
+
+    .daily_list{
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .daily_weather{
+        grid-row: 2/3;
+        width: 100px;
+        height: 165px;
+        padding: 16px 10px;
+        border-radius: 12px;
+        background-color: #262540;
+        border: 1px solid #3C3B5E;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .daily_day{
+        grid-column: 1/3;
+        grid-row: 1/2;
+        text-align: center;
+        color: white;
+        font-family: 'dm sans';
+        font-size: 1.125rem;
+        line-height: 120%;
+        font-weight: medium;
+        margin: 0px;
+    }
+
+    .daily_icon{
+        grid-column: 1/3;
+        grid-row: 2/3;
+        width: 60px;
+        height: 60px;
+        justify-self: center;
+    }
+
+    .daily_temp{
+        color: white;
+        font-family: 'dm sans';
+        font-size: 1rem;
+        line-height: 120%;
+        font-weight: medium;
+        margin: auto;
+    }
+
+    .daily_temp:nth-of-type(1){
+        grid-column: 1/2;
+        grid-row: 3/4;
+        justify-self: start;
+    }
+
+    .daily_temp:nth-of-type(2){
+        grid-column: 2/3;
+        grid-row: 3/4;
+        justify-self: end;
+    }
+
+    @media(max-width: 1100px){
+        .daily{
+
+        }
     }
 </style>

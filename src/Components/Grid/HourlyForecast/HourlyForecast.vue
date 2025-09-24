@@ -20,13 +20,14 @@
     .hourly{
         grid-column: 2/3;
         grid-row: 2/5;
-        width: 384px;
+        width: 100%;
         border-radius: 20px;
         padding: 24px;
         background-color: #262540;
         display: flex;
         flex-direction: column;
         gap: 16px;
+        align-self: start;
     }
 
     .hourly_header{

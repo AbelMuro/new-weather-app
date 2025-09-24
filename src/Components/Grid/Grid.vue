@@ -19,9 +19,18 @@
 <style scoped>
     .grid{
         width: 1216px;
-        margin: auto;
+        margin: 0px auto 40px auto;
         display: grid;
-        grid-template-columns: 1fr auto;
-        grid-template-rows: auto 318px 166px auto
+        grid-template-columns: 800px 384px;
+        grid-template-rows: auto minmax(318px, auto) minmax(166px, auto) auto;
+        column-gap: 32px;
+    }
+
+    @media(max-width: 1270px){
+        .grid{
+            width: 90%;
+            grid-template-columns: 65.7894737% 34.2105263%;
+
+        }
     }
 </style>

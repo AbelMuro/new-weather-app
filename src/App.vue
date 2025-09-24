@@ -12,6 +12,15 @@
 </template>
 
 <style>
+
+    :root{
+        --closest: 100;
+        --closer: 75;
+        --close: 50;
+        --far: 25;
+        --farthest: 1;
+    }
+
     * {
         box-sizing: border-box;
         transition: all 0.2s linear, transform 0s, opacity 0s;

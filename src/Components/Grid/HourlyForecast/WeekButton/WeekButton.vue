@@ -149,6 +149,7 @@
     .week_dropdown{
         position: absolute;
         top: 50px;
+        z-index: var(--closer);
         right: 0px;
         width: 214px;
         list-style-type: none;

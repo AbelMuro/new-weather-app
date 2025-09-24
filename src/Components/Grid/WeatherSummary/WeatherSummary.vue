@@ -25,7 +25,7 @@
     .summary{
         grid-column: 1/2;
         grid-row: 2/3;
-        width: 800px;
+        width: 100%;
         height: 286px;
         border-radius: 20px;
         background-color: blue;
@@ -35,11 +35,12 @@
         padding: 0px 24px;
         background-image: url('./images/bg-today-large.svg');
         background-position: center center;
-        background-size: contain;
+        background-size: cover;
+        background-repeat: no-repeat;
     }
 
     .summary_header{
-        width: 458px;
+        width: 100%;
         height: 68px;
         display: flex;
         flex-direction: column;

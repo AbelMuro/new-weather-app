@@ -11,7 +11,7 @@
 </script>
 
 <template>
-    <search>
+    <search class="search_container">
         <form class="search" @submit="handleSubmit">
             <img class="search_icon" :src="icons['search']">
             <input 
@@ -28,6 +28,11 @@
 </template>
 
 <style scoped>
+
+    .search_container{
+        grid-column: 1/3;
+        grid-row: 1/2;
+    }
 
     .search{
         width: 656px;

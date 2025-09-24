@@ -32,7 +32,13 @@
         <button class="units" @click="handleOpen">
             <img class="gear" :src="icons['gear']">
             Units
-            <img class="arrow" :src="globalIcons['arrow']">
+            <motion.img 
+                class="arrow" 
+                :src="globalIcons['arrow']"
+                :initial="false"
+                :animate="open ? {transform: 'rotate(180deg)'} : {transform: 'rotate(0deg)'}"
+                :transition="{duration: 0.3}"
+                />
         </button>
         <AnimatePresence>
             <motion.section 

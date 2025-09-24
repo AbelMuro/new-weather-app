@@ -1,5 +1,5 @@
 <script setup>
-    import icons from './icons';
+    import icons from '@/assets/icons';
 </script>
 
 <template>
@@ -15,7 +15,7 @@
         <section class="summary_temp">
             <img class="summary_icon" :src="icons['sunny']"/>
             <strong class="summary_degree">
-                20 °
+                20°
             </strong>
         </section>
     </article>

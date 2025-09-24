@@ -1,55 +1,109 @@
 <script setup>
+    import {ref} from 'vue';
+    import {motion, AnimatePresence} from 'motion-v';
     import icons from '@/assets/icons';
 
-    /* 
-        this is where i left off, i need to work on the JS portion of the following component
-    */
+    const open = ref(false);
+    const weekday = ref('Monday');
+
+    const handleOpen = () => {
+        open.value = !open.value;
+    }
+
+    const handleWeekday = (day) => {
+        weekday.value = day;
+        handleOpen();
+    }
 
 </script>
 
 <template>
     <div class="week_container">
-        <button class="week">
-            Monday
-            <img class="week_arrow" :src="icons['arrow']">
+        <button class="week" @click="handleOpen">
+            {{weekday}}
+            <motion.img 
+                class="week_arrow" 
+                :src="icons['arrow']" 
+                :initial="false"
+                :animate="open ? {transform: 'rotate(180deg)'} : {transform: 'rotate(0deg)'}"
+                :transition="{duration: 0.3}"
+                />
         </button>
-        <ul class="week_dropdown">
-            <li>
-                <button class="week_option">
-                    Monday
-                </button>
-            </li>
-            <li>
-                <button class="week_option"> 
-                    Tuesday
-                </button>                
-            </li>
-            <li>
-                <button class="week_option">
-                    Wednesday
-                </button>
-            </li>
-            <li>
-                <button class="week_option">
-                    Thursday
-                </button>
-            </li>
-            <li>
-                <button class="week_option">
-                    Friday
-                </button>
-            </li>
-            <li>
-                <button class="week_option">
-                    Saturday
-                </button>
-            </li>
-            <li>
-                <button class="week_option">
-                    Sunday
-                </button>                
-            </li>
-        </ul>
+        <AnimatePresence>
+            <motion.ul 
+                class="week_dropdown" 
+                v-if="open"
+                :initial="{scaleY: 0}"
+                :animate="{scaleY: 1}"
+                :exit="{scaleY: 0}"
+                :transition="{duration: 0.3}"
+                >
+                <li>
+                    <button 
+                        class="week_option" 
+                        @click="() => handleWeekday('Monday')"
+                        :style="weekday === 'Monday' ? {backgroundColor: '#302F4A'} : {}"
+                        >
+                        Monday
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        class="week_option" 
+                        @click="() => handleWeekday('Tuesday')"
+                        :style="weekday === 'Tuesday' ? {backgroundColor: '#302F4A'} : {}"
+                        > 
+                        Tuesday
+                    </button>                
+                </li>
+                <li>
+                    <button 
+                        class="week_option" 
+                        @click="() => handleWeekday('Wednesday')"
+                        :style="weekday === 'Wednesday' ? {backgroundColor: '#302F4A'} : {}"
+                        >
+                        Wednesday
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        class="week_option" 
+                        @click="() => handleWeekday('Thursday')"
+                        :style="weekday === 'Thursday' ? {backgroundColor: '#302F4A'} : {}"
+                        >
+                        Thursday
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        class="week_option" 
+                        @click="() => handleWeekday('Friday')"
+                        :style="weekday === 'Friday' ? {backgroundColor: '#302F4A'} : {}"
+                        >
+                        Friday
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        class="week_option" 
+                        @click="() => handleWeekday('Saturday')"
+                        :style="weekday === 'Saturday' ? {backgroundColor: '#302F4A'} : {}"
+                        >
+                        Saturday
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        class="week_option" 
+                        @click="() => handleWeekday('Sunday')"
+                        :style="weekday === 'Sunday' ? {backgroundColor: '#302F4A'} : {}"
+                        >
+                        Sunday
+                    </button>                
+                </li>
+            </motion.ul>
+        </AnimatePresence>
+
     </div>
 </template>
 
@@ -87,6 +141,11 @@
         background-color: #201f2e;
     }
 
+    .week:focus{
+        outline: 1px solid white;
+        outline-offset: 2px;
+    }
+
     .week_dropdown{
         position: absolute;
         top: 50px;
@@ -100,6 +159,7 @@
         background-color: #262540;
         display: flex;
         flex-direction: column;
+        transform-origin: top center;
         gap: 5px;
     }
 

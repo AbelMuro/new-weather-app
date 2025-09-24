@@ -1,5 +1,6 @@
 <script setup>
     import WeekButton from './WeekButton';
+    import HourlyTemp from './HourlyTemp';
 </script>
 
 <template>
@@ -10,6 +11,7 @@
             </h2>            
             <WeekButton/>
         </div>
+        <HourlyTemp/>
     </section>
 </template>
 
@@ -17,12 +19,14 @@
 <style scoped>
     .hourly{
         grid-column: 2/3;
-        grid-row: 2/4;
+        grid-row: 2/5;
         width: 384px;
-        height: 693px;
         border-radius: 20px;
         padding: 24px;
         background-color: #262540;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
     }
 
     .hourly_header{

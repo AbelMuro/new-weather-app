@@ -30,9 +30,19 @@
         }
     }
 
+    @media(max-width: 840px){
+        .header{
+            margin: 24px auto 64px auto;
+        }
+    }
+
     @media(max-width: 600px){
         .logo{
             height: 33px;
+        }
+
+        .header{
+            margin: 16px auto 64px auto;
         }
     }
 </style>

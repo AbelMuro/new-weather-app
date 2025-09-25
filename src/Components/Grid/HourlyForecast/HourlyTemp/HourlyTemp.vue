@@ -22,7 +22,7 @@
         width: 100%;
         height: 60px;
         border-radius: 8px;
-        padding: 12px;
+        padding: 0px 16px 0px 12px;
         background-color: #302F4A;
         border: 1px solid #3C3B5E;
         display: flex;

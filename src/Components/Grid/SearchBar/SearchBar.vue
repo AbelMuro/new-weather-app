@@ -1,12 +1,22 @@
 <script setup>
+    import useWeatherStore from '@/Store';
     import {ref} from 'vue';
     import SavedQueries from './SavedQueries';
     import icons from './icons';
 
     const searchQuery = ref('');
+    const store = useWeatherStore();
+    const {updateWeather} = store;
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        /* 
+            this is where i left off, i need to make a fetch request to
+            some URL to get weather data for a particular city
+
+        */
+
     }
 </script>
 
@@ -28,10 +38,10 @@
 </template>
 
 <style scoped>
-
     .search_container{
         grid-column: 1/3;
         grid-row: 1/2;
+        margin-bottom: 48px;        
     }
 
     .search{
@@ -42,14 +52,13 @@
         justify-content: center;
         align-items: center;
         gap: 16px;
-        margin-bottom: 48px;
     }
 
     .search > input{
         width: 526px;
         height: 56px;
         border-radius: 10px;
-        padding: 16px 64px;
+        padding: 0px 16px 0px 64px;
         background-color: #262540;
         border: none;
         color: white;
@@ -104,6 +113,39 @@
     .search_button:focus{
         outline: 2px solid #4658D9;
         outline-offset: 1px;
+    }
+
+    @media(max-width: 940px){
+        .search_container{
+            margin-bottom: 32px;
+        }
+
+        .search{
+            width: 100%;
+        }
+
+        .search > input{
+            width: 100%;
+        }
+    }
+
+    @media(max-width: 600px){
+
+        .search{
+            flex-direction: column;
+            gap: 12px;
+            border-radius: 12px;
+        }
+
+        .search_icon{
+            top: 18px;
+            bottom: initial;
+            margin: initial;
+        }
+
+        .search_button{
+            width: 100%;
+        }
     }
 
 </style>

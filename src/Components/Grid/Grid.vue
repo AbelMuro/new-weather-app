@@ -4,12 +4,6 @@
     import HourlyForecast from './HourlyForecast'; 
     import WeatherDetails from './WeatherDetails';
     import DailyForecast from './DailyForecast';
-
-    /* 
-        this is where i left off, i was in the middle of making
-        the app responsive, i am currently in 900px
-    */
-
 </script>
 
 <template>
@@ -36,7 +30,21 @@
         .grid{
             width: 90%;
             grid-template-columns: 65.7894737% 34.2105263%;
-
         }
     }
+
+    @media(max-width: 945px){
+        .grid{
+            grid-template-columns: 1fr 307px;
+        }
+    }
+
+    @media(max-width: 600px){
+        .grid{
+            width: 95%;
+            gap: 0px;
+            grid-template-columns: 1fr;
+        }
+    }
+
 </style>

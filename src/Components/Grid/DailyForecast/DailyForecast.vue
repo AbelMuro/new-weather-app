@@ -17,10 +17,10 @@
                     Tue
                 </h3>
                 <img class="daily_icon" :src="icons['drizzle']">
-                <p class="daily_temp">
+                <p class="daily_high">
                     20°
                 </p>
-                <p class="daily_temp">
+                <p class="daily_low">
                     14°
                 </p>
             </article>  
@@ -84,7 +84,7 @@
         justify-self: center;
     }
 
-    .daily_temp{
+    .daily_high, .daily_low{
         color: white;
         font-family: 'dm sans';
         font-size: 1rem;
@@ -93,21 +93,43 @@
         margin: auto;
     }
 
-    .daily_temp:nth-of-type(1){
+    .daily_high{
         grid-column: 1/2;
         grid-row: 3/4;
         justify-self: start;
     }
 
-    .daily_temp:nth-of-type(2){
+    .daily_low{
         grid-column: 2/3;
         grid-row: 3/4;
         justify-self: end;
     }
 
-    @media(max-width: 1100px){
+    @media(max-width: 840px){
         .daily{
+            grid-column: 1/3;
+            margin-bottom: 32px;
+        }
 
+        .daily_weather{
+            width: 89.14px;
         }
     }
+
+    @media(max-width: 600px){
+        .daily_list{
+            justify-content: space-between;
+        }
+
+        .daily_weather{
+            width: 30%
+        }
+    }
+
+    @media(max-width: 352px){
+        .daily_list{
+            justify-content: initial;
+        }
+    }
+
 </style>

@@ -44,4 +44,24 @@
         line-height: 120%;
         margin: 0px;
     }
+
+    @media(max-width: 945px){
+        .hourly{
+            grid-row: 3/6; 
+        }
+    }
+
+    @media(max-width: 840px){
+        .hourly{
+            grid-column: 1/3;
+            grid-row: 5/6;
+        }
+    }
+
+    @media(max-width: 600px){
+        .hourly{
+            padding: 20px;
+        }
+    }
+
 </style>

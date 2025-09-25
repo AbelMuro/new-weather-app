@@ -80,9 +80,37 @@
     .summary_degree{
         white-space: nowrap;
         color: white;
-        font-size: 8rem;
+        font-size: 6rem;
         line-height: 100%;
         letter-spacing: -2px;
         font-family: 'dm sans'
     }
+
+    @media(max-width: 945px){
+        .summary{
+            grid-column: 1/3;
+        }
+    }
+
+    @media(max-width: 840px){
+        .summary{
+            margin-bottom: 20px;
+        }
+    }
+
+    @media(max-width: 600px){
+        .summary{
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            padding: 0px;
+            background-image: url('./images/bg-today-small.svg');
+        }
+
+        .summary_city, .summary_date{
+            text-align: center
+        }
+    }
+
 </style>

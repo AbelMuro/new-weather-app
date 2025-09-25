@@ -88,4 +88,29 @@
         }
     }
 
+    @media(max-width: 840px){
+        .details_container{
+            grid-column: 1/3;
+            margin-bottom: 32px;
+            gap: 20px;
+        }
+
+        .details_detail{
+            width: 165px;
+        }
+    }
+
+    @media(max-width: 600px){
+        .details_container{
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+
+        }
+
+        .details_detail{
+            width: 100%;
+        }
+    }
+
 </style>

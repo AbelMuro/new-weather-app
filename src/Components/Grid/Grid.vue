@@ -4,6 +4,11 @@
     import HourlyForecast from './HourlyForecast'; 
     import WeatherDetails from './WeatherDetails';
     import DailyForecast from './DailyForecast';
+
+    /* 
+        this is where i left off, i need to get the data from the global store
+        and share it across the app
+    */
 </script>
 
 <template>

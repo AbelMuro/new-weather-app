@@ -8,15 +8,28 @@
     const store = useWeatherStore();
     const {updateWeather} = store;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        /* 
-            this is where i left off, i need to make a fetch request to
-            some URL to get weather data for a particular city
+        try{
+            const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max`, {
+                method: 'GET'
+            });
 
-        */
+            if(response.status === 200){
+                const result = await response.json();
+                updateWeather(result);
 
+            }
+            else{
+                const result = await response.text();
+                console.log(result)
+            }            
+        }
+        catch(error){
+            const message = error.message;
+            console.log(message);
+        }
     }
 </script>
 

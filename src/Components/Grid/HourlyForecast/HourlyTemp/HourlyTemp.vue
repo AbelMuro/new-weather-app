@@ -20,7 +20,7 @@
 <template>
     <div class="temp" v-for="(hour, _) in forecast" >
         <div class="temp_time"> 
-            <img class="temp_icon" :src="icons['fog']">
+            <img class="temp_icon" :src="icons[hour.condition]">
             {{hour.hour}}
         </div>
         <p class="temp_degree">

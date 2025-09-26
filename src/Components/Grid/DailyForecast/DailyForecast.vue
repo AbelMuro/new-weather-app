@@ -9,7 +9,6 @@
     const dailyWeather = ref([]);
 
     watch(daily_forecast, (dailyForecast) => {
-        console.log('daily fore cast')
         dailyWeather.value = dailyForecast;
     }, {flush: 'post', deep: true})
 
@@ -25,7 +24,7 @@
                 <h3 class="daily_day">
                     {{day.day.slice(0, 3)}}
                 </h3>
-                <img class="daily_icon" :src="icons['drizzle']">
+                <img class="daily_icon" :src="icons[day.condition]">
                 <p class="daily_high">
                     {{day.max}}
                 </p>

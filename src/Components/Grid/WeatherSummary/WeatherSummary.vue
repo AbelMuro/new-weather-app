@@ -4,7 +4,7 @@
     import icons from '@/assets/icons';
 
     const store = useWeatherStore();
-    const {location, current_temp} = storeToRefs(store);
+    const {location, current_temp, condition} = storeToRefs(store);
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const date = new Date()
@@ -27,7 +27,7 @@
             </p>    
         </section>
         <section class="summary_temp">
-            <img class="summary_icon" :src="icons['sunny']"/>
+            <img class="summary_icon" :src="icons[condition]"/>
             <strong class="summary_degree">
                 {{current_temp}}°
             </strong>

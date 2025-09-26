@@ -1,11 +1,10 @@
 <script setup>
-    /* 
-        Note to self: 
+    import useWeatherStore from '@/Store';
+    import {storeToRefs} from 'pinia';
 
-            this is where i left off, i need to look more closely at the object that is
-            being returns from the meteo API, and i need to create additional properties 
-            in the global state. Then i can dynamically update the following component
-    */
+    const store = useWeatherStore();
+    const {feels_like, humidity, wind, precipitation} = storeToRefs(store);
+
 </script>
 
 <template>
@@ -15,7 +14,7 @@
                 Feels Like
             </h3>
             <strong class="details_data">
-                18°
+                {{feels_like}}°
             </strong>
         </div>
         <div class="details_detail">
@@ -23,7 +22,7 @@
                 Humidity
             </h3>
             <strong class="details_data">
-                46%
+                {{humidity}}%
             </strong>
         </div>
         <div class="details_detail">
@@ -31,7 +30,7 @@
                 Wind
             </h3>
             <strong class="details_data">
-                14 km/h
+                {{wind}}
             </strong>
         </div>
         <div class="details_detail">
@@ -39,7 +38,7 @@
                 Precipitation
             </h3>
             <strong class="details_data">
-                0 mm
+                {{precipitation}} mm
             </strong>
         </div>
     </section>

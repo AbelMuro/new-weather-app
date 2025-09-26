@@ -6,9 +6,12 @@
     import DailyForecast from './DailyForecast';
 
     /* 
-        this is where i left off, i need to get the data from the global store
-        and share it across the app
+        this is where i left off, i need to create an element that displays a message,
+        this element will be a placeholder for the app before the user starts searching for weather data
+
+        i also need to implement a loading screen for each component
     */
+
 </script>
 
 <template>

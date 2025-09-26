@@ -8,14 +8,40 @@ const days = [
     'Friday', 
     'Saturday',
     'Sunday'
-]
+];
+
+
+
+const getCondition = (code) => {
+    const weathercodes = {
+        "sunny" : [0, 1],
+        "partlyCloudy": [2, 2],
+        "overcast": [3, 44],
+        "fog": [45, 60],
+        "rainy": [61, 70],
+        "snow": [71, 94],
+        "storm": [95, 100]
+    }
+
+    for(let weather of Object.entries(weathercodes)){
+        const condition = weather[0];
+        const range = weather[1];
+
+        if(range[0] <= code && code <= range[1])
+            return condition;
+    }
+
+}
+
+
+
 
 const useWeatherStore = defineStore('weather', {
     state: () => ({
         location: '',
         date: '',
         current_temp: '',
-        weather: '',
+        condition: '',
         feels_like: '',
         humidity: '',
         wind: '',
@@ -34,13 +60,17 @@ const useWeatherStore = defineStore('weather', {
     }),
     actions: {
         updateWeather(weather) {
-            console.log(weather);
+            this.clearState();
             const current = weather.current;
             const units = weather.current_units;
             const hourly = weather.hourly;
             const hourly_units = weather.hourly_units;
             const daily = weather.daily;
             const daily_units = weather.daily_units;
+            const weathercode = current.weathercode;
+            this.feels_like = current.apparent_temperature;
+            this.precipitation = current.precipitation;
+            this.humidity = current.relative_humidity_2m;
             this.location = weather.displayName;
             this.current_temp = current.temperature_2m;
             this.date = new Date(current.time);
@@ -54,7 +84,8 @@ const useWeatherStore = defineStore('weather', {
                 hour = hour ? hour : 12;
                 this.hourly_forecast[day].push({
                     temp: `${hourly.temperature_2m[i]} ${hourly_units.temperature_2m}`,
-                    hour: `${hour} ${time}`,                    
+                    hour: `${hour} ${time}`,       
+                    condition: getCondition(hourly.weathercode[i])             
                 })              
             }
 
@@ -66,14 +97,36 @@ const useWeatherStore = defineStore('weather', {
                         max: `${daily.temperature_2m_max[i]}`,
                         min: `${daily.temperature_2m_min[i]}`,
                         day,
+                        condition: getCondition(daily.weathercode[i])
                 });                
             }
-
+            this.condition = getCondition(weathercode);
+        },
+        updateCurrentDay(day) {
+            this.hourly_forecast.current_day = day;
+        },
+        clearState() {
+            this.location = '';
+            this.date = '';
+            this.current_temp = '';
+            this.condition = '';
+            this.feels_like = '';
+            this.humidity = '';
+            this.wind = '';
+            this.precipitation = '';
+            this.hourly_forecast = {
+                current_day: 'Monday',
+                Monday: [],
+                Tuesday: [],
+                Wednesday: [],
+                Thursday: [],
+                Friday: [],
+                Saturday: [],
+                Sunday: []
+            },
+            this.daily_forecast = [];
         }
     },
-    updateCurrentDay(day) {
-        this.hourly_forecast.current_day = day;
-    }
 });
 
 export default useWeatherStore;

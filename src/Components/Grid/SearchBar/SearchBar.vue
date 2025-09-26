@@ -11,7 +11,7 @@
 
     const geocode = async () => {
         try{
-            const response = await fetch(`https://geocode.maps.co/search?q=${'Berlin'}&api_key=${apiKey}`, {
+            const response = await fetch(`https://geocode.maps.co/search?q=${searchQuery.value}&api_key=${apiKey}`, {
                 method: 'GET'
             });
             if(response.status === 200){
@@ -36,7 +36,7 @@
         try{
             const location = await geocode();
 
-            const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max`, {
+            const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&current=temperature_2m,relative_humidity_2m,precipitation,apparent_temperature,wind_speed_10m,weathercode&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,weathercode&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max,weathercode`, {
                 method: 'GET'
             });
 

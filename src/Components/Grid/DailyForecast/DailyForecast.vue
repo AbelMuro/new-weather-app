@@ -1,8 +1,17 @@
 <script setup>
-    import {ref} from 'vue';
+    import useWeatherStore from '@/Store';
+    import {storeToRefs} from 'pinia';
+    import {ref, watch} from 'vue';
     import icons from '@/assets/icons';
 
-    const dailyWeather = ref(7);
+    const store = useWeatherStore();
+    const {daily_forecast} = storeToRefs(store);
+    const dailyWeather = ref([]);
+
+    watch(daily_forecast, (dailyForecast) => {
+        console.log('daily fore cast')
+        dailyWeather.value = dailyForecast;
+    }, {flush: 'post', deep: true})
 
 </script>
 
@@ -14,14 +23,14 @@
         <div class="daily_list">
             <article class="daily_weather" v-for="(day, _) in dailyWeather">
                 <h3 class="daily_day">
-                    Tue
+                    {{day.day.slice(0, 3)}}
                 </h3>
                 <img class="daily_icon" :src="icons['drizzle']">
                 <p class="daily_high">
-                    20°
+                    {{day.max}}
                 </p>
                 <p class="daily_low">
-                    14°
+                    {{day.min}}
                 </p>
             </article>  
         </div>

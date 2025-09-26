@@ -20,7 +20,16 @@ const useWeatherStore = defineStore('weather', {
         humidity: '',
         wind: '',
         precipitation: '',
-        hourly_forecast: [],
+        hourly_forecast: {
+            current_day: 'Monday',
+            Monday: [],
+            Tuesday: [],
+            Wednesday: [],
+            Thursday: [],
+            Friday: [],
+            Saturday: [],
+            Sunday: []
+        },
         daily_forecast: [],
     }),
     actions: {
@@ -32,34 +41,38 @@ const useWeatherStore = defineStore('weather', {
             const hourly_units = weather.hourly_units;
             const daily = weather.daily;
             const daily_units = weather.daily_units;
+            this.location = weather.displayName;
             this.current_temp = current.temperature_2m;
             this.date = new Date(current.time);
             this.wind = `${current.wind_speed_10m} ${units.wind_speed_10m}`;  
-            const hourlyForecast = [];
-            const dailyForecast = [];
             for(let i = 0; i < hourly.temperature_2m.length; i++){
                 const date = new Date(hourly.time[i]);
-                const day = date.getDay();
+                const day = days[date.getDay()];
                 let hour = date.getHours();
+                const time = hour >= 12 ? 'pm' : 'am'
                 hour =  hour % 12;
                 hour = hour ? hour : 12;
-                
-                hourlyForecast.push({
+                this.hourly_forecast[day].push({
                     temp: `${hourly.temperature_2m[i]} ${hourly_units.temperature_2m}`,
-                    hour,
-                    day: days[day],
+                    hour: `${hour} ${time}`,                    
+                })              
+            }
+
+            for(let i = 0; i < 7; i++){
+                const date = new Date(daily.time[i]);
+                const day = days[date.getDay()];
+                this.daily_forecast.push({
+                        precipitation: `${daily.precipitation_sum[i]} ${daily_units.precipitation_sum}`,
+                        max: `${daily.temperature_2m_max[i]}`,
+                        min: `${daily.temperature_2m_min[i]}`,
+                        day,
                 });                
             }
 
-            this.hourly_forecast = hourlyForecast;
-            for(let i = 0; i < 7; i++)
-                dailyForecast.push({
-                        precipitation: `${daily.precipitation_sum[i]} ${daily_units.precipitation_sum}`,
-                        max: `${daily.temperature_2m_max[i]} ${daily_units.temperature_2m_max}`,
-                        min: `${daily.temperature_2m_min[i]} ${daily_units.temperature_2m_min}`
-                });
-            this.daily_forecast = dailyForecast;
         }
+    },
+    updateCurrentDay(day) {
+        this.hourly_forecast.current_day = day;
     }
 });
 

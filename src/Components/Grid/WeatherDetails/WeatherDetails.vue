@@ -1,5 +1,11 @@
 <script setup>
+    /* 
+        Note to self: 
 
+            this is where i left off, i need to look more closely at the object that is
+            being returns from the meteo API, and i need to create additional properties 
+            in the global state. Then i can dynamically update the following component
+    */
 </script>
 
 <template>

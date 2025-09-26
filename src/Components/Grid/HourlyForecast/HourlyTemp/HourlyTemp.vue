@@ -1,18 +1,30 @@
 <script setup>
-    import {ref} from 'vue';
+    import useWeatherStore from '@/Store';
+    import {storeToRefs} from 'pinia';
+    import {ref, computed, watch} from 'vue';
     import icons from '@/assets/icons';
 
-    const hours = ref(7)
+    const forecast = ref([]);
+    const store = useWeatherStore();
+    const {hourly_forecast} = storeToRefs(store);
+    const currentDay = computed(() => {
+        return hourly_forecast.value.current_day;
+    });
+
+    watch([currentDay, hourly_forecast], ([currentDay, hourlyForecast]) => {
+        forecast.value = hourlyForecast[currentDay]
+    }, {flush: 'post', deep: true})
+
 </script>
 
 <template>
-    <div class="temp" v-for="(hour, _) in hours" >
+    <div class="temp" v-for="(hour, _) in forecast" >
         <div class="temp_time"> 
             <img class="temp_icon" :src="icons['fog']">
-            3 PM
+            {{hour.hour}}
         </div>
         <p class="temp_degree">
-            20 °
+            {{hour.temp}}
         </p>
     </div>
 </template>
@@ -28,6 +40,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-shrink: 0;
     }
 
     .temp_time{

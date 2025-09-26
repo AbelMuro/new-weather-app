@@ -1,6 +1,6 @@
 <script setup>
     import WeekButton from './WeekButton';
-    import HourlyTemp from './HourlyTemp';
+    import HourlyTemp from './HourlyTemp';    
 </script>
 
 <template>
@@ -18,6 +18,8 @@
 
 <style scoped>
     .hourly{
+        height: 693px; 
+        overflow-y: scroll;
         grid-column: 2/3;
         grid-row: 2/5;
         width: 100%;
@@ -29,6 +31,20 @@
         gap: 16px;
         align-self: start;
     }
+
+
+    .hourly::-webkit-scrollbar{
+        width: 4px;
+        background-color: transparent;
+    }
+
+    .hourly::-webkit-scrollbar-thumb{
+        background-image: url('./icons/Divider.png');
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: contain;
+    }
+
 
     .hourly_header{
         display: flex;

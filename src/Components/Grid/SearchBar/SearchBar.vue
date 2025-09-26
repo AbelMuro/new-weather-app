@@ -7,18 +7,42 @@
     const searchQuery = ref('');
     const store = useWeatherStore();
     const {updateWeather} = store;
+    const apiKey = import.meta.env.VITE_API_KEY
+
+    const geocode = async () => {
+        try{
+            const response = await fetch(`https://geocode.maps.co/search?q=${'Berlin'}&api_key=${apiKey}`, {
+                method: 'GET'
+            });
+            if(response.status === 200){
+                const result = await response.json();
+                return result[0]
+            }
+            else{
+                const result = await response.text();
+                return result;
+            }
+        }
+        catch(error){
+            const message = error.message;
+            console.log(message);
+            throw new Error(message);
+        }
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try{
-            const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max`, {
+            const location = await geocode();
+
+            const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max`, {
                 method: 'GET'
             });
 
             if(response.status === 200){
                 const result = await response.json();
-                updateWeather(result);
+                updateWeather({...result, displayName: location.display_name});
 
             }
             else{

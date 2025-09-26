@@ -1,10 +1,13 @@
 <script setup>
-    import {ref} from 'vue';
+    import useWeatherStore from '@/Store';
+    import {ref, watch} from 'vue';
     import {motion, AnimatePresence} from 'motion-v';
     import icons from '@/assets/icons';
 
     const open = ref(false);
     const weekday = ref('Monday');
+    const store = useWeatherStore();
+    const {updateCurrentDay} = store;
 
     const handleOpen = () => {
         open.value = !open.value;
@@ -14,6 +17,10 @@
         weekday.value = day;
         handleOpen();
     }
+
+    watch(weekday, (weekday) => {
+        updateCurrentDay(weekday);
+    }, {flush: 'post'})  
 
 </script>
 

@@ -1,21 +1,35 @@
 <script setup>
+    import useWeatherStore from '@/Store';
+    import {storeToRefs} from 'pinia';
     import icons from '@/assets/icons';
+
+    const store = useWeatherStore();
+    const {location, current_temp} = storeToRefs(store);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const date = new Date()
+    const dayOfWeek = date.getDay();
+    const month = date.getMonth();
+    const dayOfMonth = date.getDate();
+    const year = date.getFullYear();
+    const fullDate = `${week[dayOfWeek - 1]}, ${months[month]} ${dayOfMonth}, ${year}`
+
 </script>
 
 <template>
     <article class="summary">
         <section class="summary_header">
             <h2 class="summary_city">
-                Berlin, Germany  
+                {{location}}  
             </h2>
             <p class="summary_date">
-                Tuesday, Aug 5, 2025
+                {{fullDate}}
             </p>    
         </section>
         <section class="summary_temp">
             <img class="summary_icon" :src="icons['sunny']"/>
             <strong class="summary_degree">
-                20°
+                {{current_temp}}°
             </strong>
         </section>
     </article>

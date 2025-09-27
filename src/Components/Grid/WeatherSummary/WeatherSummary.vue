@@ -38,7 +38,7 @@
 <style scoped>
     .summary{
         grid-column: 1/2;
-        grid-row: 2/3;
+        grid-row: 1/2;
         width: 100%;
         height: 286px;
         border-radius: 20px;

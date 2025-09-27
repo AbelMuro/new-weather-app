@@ -4,23 +4,26 @@
     import HourlyForecast from './HourlyForecast'; 
     import WeatherDetails from './WeatherDetails';
     import DailyForecast from './DailyForecast';
+    import NoSearchResultsMessage from './NoSearchResultsMessage';
+    import ErrorMessage from './ErrorMessage'
+    import useWeatherStore from '@/Store';
+    import {storeToRefs} from 'pinia';
 
-    /* 
-        this is where i left off, i need to create an element that displays a message,
-        this element will be a placeholder for the app before the user starts searching for weather data
+    const store = useWeatherStore();
+    const {error, noSearchResults, location} = storeToRefs(store);
 
-        i also need to implement a loading screen for each component
-    */
 
 </script>
 
 <template>
-    <section class="grid">
-        <SearchBar/>
+    <SearchBar v-if="!error"/>
+    <ErrorMessage v-else/>
+    <NoSearchResultsMessage v-if="noSearchResults"/>
+    <section class="grid" v-if="location">
         <WeatherSummary/>
         <HourlyForecast/>
         <WeatherDetails/>
-        <DailyForecast/>
+        <DailyForecast/>        
     </section>
 </template>
 
@@ -30,7 +33,7 @@
         margin: 0px auto 40px auto;
         display: grid;
         grid-template-columns: 800px 384px;
-        grid-template-rows: auto minmax(318px, auto) minmax(166px, auto) auto;
+        grid-template-rows: minmax(318px, auto) minmax(166px, auto) auto;
         column-gap: 32px;
     }
 

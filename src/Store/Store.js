@@ -38,6 +38,8 @@ const getCondition = (code) => {
 
 const useWeatherStore = defineStore('weather', {
     state: () => ({
+        error: false,
+        noSearchResults: false,
         location: '',
         date: '',
         current_temp: '',
@@ -102,8 +104,14 @@ const useWeatherStore = defineStore('weather', {
             }
             this.condition = getCondition(weathercode);
         },
-        updateCurrentDay(day) {
+        setCurrentDay(day) {
             this.hourly_forecast.current_day = day;
+        },
+        setError(error){
+            this.error = error;
+        },
+        setNoSearchResults(results){
+            this.noSearchResults = results;
         },
         clearState() {
             this.location = '';

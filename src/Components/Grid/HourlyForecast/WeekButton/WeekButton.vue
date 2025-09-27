@@ -1,33 +1,34 @@
 <script setup>
     import useWeatherStore from '@/Store';
-    import {ref, watch} from 'vue';
+    import {storeToRefs} from 'pinia';
+    import {ref, computed} from 'vue';
     import {motion, AnimatePresence} from 'motion-v';
     import icons from '@/assets/icons';
 
     const open = ref(false);
-    const weekday = ref('Monday');
     const store = useWeatherStore();
-    const {updateCurrentDay} = store;
+    const {hourly_forecast} = storeToRefs(store);
+    const {setCurrentDay} = store;
+
+    const currentDay = computed(() => {
+        return hourly_forecast.value.current_day;
+    })
 
     const handleOpen = () => {
         open.value = !open.value;
     }
 
     const handleWeekday = (day) => {
-        weekday.value = day;
+        setCurrentDay(day);
         handleOpen();
-    }
-
-    watch(weekday, (weekday) => {
-        updateCurrentDay(weekday);
-    }, {flush: 'post'})  
+    } 
 
 </script>
 
 <template>
     <div class="week_container">
         <button class="week" @click="handleOpen">
-            {{weekday}}
+            {{currentDay}}
             <motion.img 
                 class="week_arrow" 
                 :src="icons['arrow']" 

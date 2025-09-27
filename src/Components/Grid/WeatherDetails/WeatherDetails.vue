@@ -51,7 +51,7 @@
         flex-wrap: wrap;
         gap: 24px;
         grid-column: 1/2;
-        grid-row: 3/4;
+        grid-row: 2/3;
         margin-bottom: 48px;
     }
 

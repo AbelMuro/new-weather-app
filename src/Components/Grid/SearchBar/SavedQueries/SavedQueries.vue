@@ -1,23 +1,28 @@
 <script setup>
-    const {search} = defineProps({
-        search: String
+    import {watch, ref} from 'vue';
+    const {search, handleSearchQuery} = defineProps({
+        search: String,
+        handleSearchQuery: Function
+    });
+
+    const savedSearches = ref([]);
+
+    watch(() => search, () => {
+        if(!search) {
+            savedSearches.value = [];
+            return;
+        }
+
+        const prevSearches = JSON.parse(localStorage.getItem('saved_searches'));
+        savedSearches.value = prevSearches;
     })
 </script>
 
 <template>
-    <section class="queries" v-if="search">
-        <div class="queries_query">
-            City Name
-        </div>
-        <div class="queries_query">
-            City Name
-        </div>
-        <div class="queries_query">
-            City Name
-        </div>
-        <div class="queries_query">
-            City Name
-        </div>
+    <section class="queries" v-if="search && savedSearches.length">
+        <button type='button' class="queries_query" v-for="(savedSearch) in savedSearches" @click="() => handleSearchQuery(savedSearch)">
+            {{savedSearch}}
+        </button>
     </section>
 </template>
 
@@ -50,6 +55,7 @@
         align-items: center;
         cursor: pointer;
         border: 1px solid transparent;
+        background-color: transparent;
     }
 
     .queries_query:hover{

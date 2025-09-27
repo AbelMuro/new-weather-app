@@ -1,13 +1,19 @@
 <script setup>
     import useWeatherStore from '@/Store';
-    import {ref} from 'vue';
+    import {ref, useTemplateRef} from 'vue';
     import SavedQueries from './SavedQueries';
     import icons from './icons';
 
     const searchQuery = ref('');
+    const submitButton = useTemplateRef('submit_button');
     const store = useWeatherStore();
-    const {updateWeather} = store;
-    const apiKey = import.meta.env.VITE_API_KEY
+    const {updateWeather, setError, setNoSearchResults} = store;
+    const apiKey = import.meta.env.VITE_API_KEY;
+
+    const handleSearchQuery = (query) => {
+        searchQuery.value = query;
+        submitButton.value.click();
+    }
 
     const geocode = async () => {
         try{
@@ -16,16 +22,21 @@
             });
             if(response.status === 200){
                 const result = await response.json();
+                setNoSearchResults(false);
+                setError(false);
                 return result[0]
             }
             else{
                 const result = await response.text();
+                setNoSearchResults(true);
+                setError(false);
                 return result;
             }
         }
         catch(error){
             const message = error.message;
             console.log(message);
+            setError(true);
             throw new Error(message);
         }
     }
@@ -34,6 +45,11 @@
         e.preventDefault();
 
         try{
+            if(!searchQuery.value){
+                setNoSearchResults(true);
+                return;
+            }
+
             const location = await geocode();
 
             const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&current=temperature_2m,relative_humidity_2m,precipitation,apparent_temperature,wind_speed_10m,weathercode&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,weathercode&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max,weathercode`, {
@@ -42,16 +58,36 @@
 
             if(response.status === 200){
                 const result = await response.json();
+                const prevSearches = JSON.parse(localStorage.getItem('saved_searches'));
+                if(prevSearches && !prevSearches.includes(location.display_name)){
+                    if(prevSearches.length > 4) {
+                        prevSearches.unshift(location.display_name);
+                        prevSearches.pop();
+                        localStorage.setItem('saved_searches', JSON.stringify(prevSearches)); 
+                    }
+                    else
+                        localStorage.setItem('saved_searches', JSON.stringify([location.display_name, ...prevSearches])); 
+                }
+                    
+                else if(!prevSearches)
+                    localStorage.setItem('saved_searches', JSON.stringify([location.display_name]))
+
+                searchQuery.value = '';
+                setError(false);
+                setNoSearchResults(false);
                 updateWeather({...result, displayName: location.display_name});
 
             }
             else{
                 const result = await response.text();
+                setNoSearchResults(true);
+                setError(false);
                 console.log(result)
             }            
         }
         catch(error){
             const message = error.message;
+            setError(true);
             console.log(message);
         }
     }
@@ -66,10 +102,10 @@
                 v-model="searchQuery"
                 placeholder="Search for a place..."
                 />
-            <button class="search_button">
+            <button class="search_button" ref="submit_button">
                 Search
             </button>
-            <SavedQueries :search="searchQuery"/>            
+            <SavedQueries :search="searchQuery" :handleSearchQuery="handleSearchQuery"/>            
         </form>
     </search>
 </template>
@@ -158,7 +194,7 @@
         }
 
         .search{
-            width: 100%;
+            width: 90%;
         }
 
         .search > input{
@@ -169,6 +205,7 @@
     @media(max-width: 600px){
 
         .search{
+            width: 95%;
             flex-direction: column;
             gap: 12px;
             border-radius: 12px;

@@ -13,7 +13,7 @@
 
     watch([currentDay, hourly_forecast], ([currentDay, hourlyForecast]) => {
         forecast.value = hourlyForecast[currentDay]
-    }, {flush: 'post', deep: true})
+    }, {flush: 'post', deep: true, immediate: true})
 
 </script>
 

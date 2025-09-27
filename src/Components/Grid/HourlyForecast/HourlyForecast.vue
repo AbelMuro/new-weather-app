@@ -21,7 +21,7 @@
         height: 693px; 
         overflow-y: scroll;
         grid-column: 2/3;
-        grid-row: 2/5;
+        grid-row: 1/4;
         width: 100%;
         border-radius: 20px;
         padding: 24px;
@@ -63,7 +63,7 @@
 
     @media(max-width: 945px){
         .hourly{
-            grid-row: 3/6; 
+            grid-row: 2/4; 
         }
     }
 

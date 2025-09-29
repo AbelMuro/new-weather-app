@@ -3,7 +3,7 @@
     import {storeToRefs} from 'pinia';
 
     const store = useWeatherStore();
-    const {feels_like, humidity, wind, precipitation} = storeToRefs(store);
+    const {feels_like, humidity, wind, precipitation, loading} = storeToRefs(store);
 
 </script>
 
@@ -13,15 +13,22 @@
             <h3 class="details_title">
                 Feels Like
             </h3>
-            <strong class="details_data">
+            <strong class="details_data" v-if="loading">
+                -
+            </strong>
+            <strong class="details_data" v-else>
                 {{feels_like}}°
             </strong>
         </div>
+
         <div class="details_detail">
             <h3 class="details_title">
                 Humidity
             </h3>
-            <strong class="details_data">
+            <strong class="details_data" v-if="loading">
+                -
+            </strong>
+            <strong class="details_data" v-else>
                 {{humidity}}%
             </strong>
         </div>
@@ -29,7 +36,10 @@
             <h3 class="details_title">
                 Wind
             </h3>
-            <strong class="details_data">
+            <strong class="details_data" v-if="loading">
+                -
+            </strong>
+            <strong class="details_data" v-else>
                 {{wind}}
             </strong>
         </div>
@@ -37,7 +47,10 @@
             <h3 class="details_title">
                 Precipitation
             </h3>
-            <strong class="details_data">
+            <strong class="details_data" v-if="loading">
+                -
+            </strong>
+            <strong class="details_data" v-else>
                 {{precipitation}} mm
             </strong>
         </div>

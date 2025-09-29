@@ -3,9 +3,6 @@
     import Grid from './Components/Grid';
     import DisplayTitle from './Components/DisplayTitle';
 
-    /* 
-        this is where i left off, i need to start creating the loading templates for each component
-    */
 </script>
 
 <template>

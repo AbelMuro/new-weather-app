@@ -30,6 +30,8 @@
 
 <style scoped>
     .loading_summary{
+        grid-column: 1/2;
+        grid-row: 1/2;
         width: 100%;
         height: 286px;
         border-radius: 20px;
@@ -58,6 +60,18 @@
         height: 12px;
         border-radius: 100%;
         background-color: white;
+    }
+
+    @media(max-width: 945px){
+        .loading_summary{
+            grid-column: 1/3;
+        }
+    }
+
+    @media(max-width: 840px){
+        .loading_summary{
+            margin-bottom: 20px;
+        }
     }
 
 </style>

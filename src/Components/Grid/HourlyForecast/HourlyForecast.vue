@@ -9,7 +9,6 @@
     const store = useWeatherStore();
     const {loading} = storeToRefs(store);
 
-
 </script>
 
 <template>
@@ -17,12 +16,13 @@
         <div class="hourly_header">
             <h2 class="hourly_title">
                 Hourly forecast
-            </h2>            
-            <WeekButton v-if="!loading"/>
-            <LoadingButton v-else/>
+            </h2>       
+            <LoadingButton v-if="loading"/>     
+            <WeekButton v-else/>
         </div>
-        <HourlyTemp v-if="!loading"/>
-        <LoadingHourlyTemp v-else/>
+        <LoadingHourlyTemp v-if="loading"/>
+        <HourlyTemp v-else/>
+        
     </section>
 </template>
 

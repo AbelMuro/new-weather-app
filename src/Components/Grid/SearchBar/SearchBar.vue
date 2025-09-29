@@ -100,14 +100,10 @@
     watch(loading, (loading) => {
         console.log(loading)
         if(loading)
-            handleSubmit();
+            handleSubmit();        
+
     }, {flush: 'post'});
 
-
-    /* 
-        this is where i left off, i need to figure out why the change in the loading state
-        is not reflecting in the other components
-    */
 </script>
 
 <template>

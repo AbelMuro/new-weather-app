@@ -4,7 +4,7 @@
     import icons from '@/assets/icons';
 
     const store = useWeatherStore();
-    const {daily_forecast} = storeToRefs(store);
+    const {daily_forecast, loading} = storeToRefs(store);
 
 </script>
 
@@ -14,7 +14,8 @@
             Daily forecast
         </h2>
         <div class="daily_list">
-            <article class="daily_weather" v-for="(day, _) in daily_forecast">
+            <article class="daily_weather" v-for="() in 7" v-if="loading"></article>
+            <article class="daily_weather" v-for="(day, _) in daily_forecast" v-else>
                 <h3 class="daily_day">
                     {{day.day.slice(0, 3)}}
                 </h3>

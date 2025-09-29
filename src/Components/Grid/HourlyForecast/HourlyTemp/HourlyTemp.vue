@@ -5,6 +5,7 @@
     import icons from '@/assets/icons';
 
     const forecast = ref([]);
+
     const store = useWeatherStore();
     const {hourly_forecast} = storeToRefs(store);
     const currentDay = computed(() => {
@@ -18,7 +19,7 @@
 </script>
 
 <template>
-    <div class="temp" v-for="(hour, _) in forecast" >
+    <div class="temp" v-for="(hour, _) in forecast">
         <div class="temp_time"> 
             <img class="temp_icon" :src="icons[hour.condition]">
             {{hour.hour}}

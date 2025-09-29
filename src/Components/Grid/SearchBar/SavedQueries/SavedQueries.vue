@@ -13,7 +13,7 @@
             return;
         }
 
-        const prevSearches = JSON.parse(localStorage.getItem('saved_searches'));
+        const prevSearches = JSON.parse(localStorage.getItem('saved_searches')) || [];
         savedSearches.value = prevSearches;
     })
 </script>

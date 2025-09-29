@@ -39,6 +39,7 @@ const getCondition = (code) => {
 const useWeatherStore = defineStore('weather', {
     state: () => ({
         error: false,
+        loading: false,
         noSearchResults: false,
         location: '',
         date: '',
@@ -112,6 +113,9 @@ const useWeatherStore = defineStore('weather', {
         },
         setNoSearchResults(results){
             this.noSearchResults = results;
+        },
+        setLoading(isLoading){
+            this.loading = isLoading;
         },
         clearState() {
             this.location = '';

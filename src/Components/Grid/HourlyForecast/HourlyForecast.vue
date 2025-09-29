@@ -1,6 +1,15 @@
 <script setup>
     import WeekButton from './WeekButton';
     import HourlyTemp from './HourlyTemp';    
+    import LoadingButton from './LoadingButton';
+    import LoadingHourlyTemp from './LoadingHourlyTemp';
+    import useWeatherStore from '@/Store'
+    import {storeToRefs} from 'pinia';
+
+    const store = useWeatherStore();
+    const {loading} = storeToRefs(store);
+
+
 </script>
 
 <template>
@@ -9,9 +18,11 @@
             <h2 class="hourly_title">
                 Hourly forecast
             </h2>            
-            <WeekButton/>
+            <WeekButton v-if="!loading"/>
+            <LoadingButton v-else/>
         </div>
-        <HourlyTemp/>
+        <HourlyTemp v-if="!loading"/>
+        <LoadingHourlyTemp v-else/>
     </section>
 </template>
 

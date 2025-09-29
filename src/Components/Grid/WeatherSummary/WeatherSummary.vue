@@ -2,9 +2,10 @@
     import useWeatherStore from '@/Store';
     import {storeToRefs} from 'pinia';
     import icons from '@/assets/icons';
+    import LoadingSummary from './LoadingSummary'
 
     const store = useWeatherStore();
-    const {location, current_temp, condition} = storeToRefs(store);
+    const {location, current_temp, condition, loading} = storeToRefs(store);
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const date = new Date()
@@ -17,7 +18,7 @@
 </script>
 
 <template>
-    <article class="summary">
+    <article class="summary" v-if="!loading">
         <section class="summary_header">
             <h2 class="summary_city">
                 {{location}}  
@@ -33,6 +34,7 @@
             </strong>
         </section>
     </article>
+    <LoadingSummary v-else/>
 </template>
 
 <style scoped>

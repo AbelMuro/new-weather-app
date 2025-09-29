@@ -1,13 +1,15 @@
 <script setup>
     import useWeatherStore from '@/Store';
-    import {ref, useTemplateRef} from 'vue';
+    import {storeToRefs} from 'pinia';
+    import {ref, useTemplateRef, watch} from 'vue';
     import SavedQueries from './SavedQueries';
     import icons from './icons';
 
     const searchQuery = ref('');
     const submitButton = useTemplateRef('submit_button');
     const store = useWeatherStore();
-    const {updateWeather, setError, setNoSearchResults} = store;
+    const {loading} = storeToRefs(store);
+    const {updateWeather, setError, setNoSearchResults, setLoading} = store;
     const apiKey = import.meta.env.VITE_API_KEY;
 
     const handleSearchQuery = (query) => {
@@ -41,9 +43,12 @@
         }
     }
 
-    const handleSubmit = async (e) => {
+    const handleLoading = (e) => {
         e.preventDefault();
+        setLoading(true);
+    }
 
+    const handleSubmit = async (e) => {
         try{
             if(!searchQuery.value){
                 setNoSearchResults(true);
@@ -51,7 +56,6 @@
             }
 
             const location = await geocode();
-
             const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&current=temperature_2m,relative_humidity_2m,precipitation,apparent_temperature,wind_speed_10m,weathercode&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,weathercode&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max,weathercode`, {
                 method: 'GET'
             });
@@ -76,26 +80,39 @@
                 setError(false);
                 setNoSearchResults(false);
                 updateWeather({...result, displayName: location.display_name});
-
             }
             else{
                 const result = await response.text();
                 setNoSearchResults(true);
                 setError(false);
-                console.log(result)
-            }            
+                console.log(result);
+            }      
+            setLoading(false);
         }
         catch(error){
             const message = error.message;
             setError(true);
+            setLoading(false);
             console.log(message);
         }
     }
+
+    watch(loading, (loading) => {
+        console.log(loading)
+        if(loading)
+            handleSubmit();
+    }, {flush: 'post'});
+
+
+    /* 
+        this is where i left off, i need to figure out why the change in the loading state
+        is not reflecting in the other components
+    */
 </script>
 
 <template>
     <search class="search_container">
-        <form class="search" @submit="handleSubmit">
+        <form class="search" @submit="handleLoading">
             <img class="search_icon" :src="icons['search']">
             <input 
                 type="text" 

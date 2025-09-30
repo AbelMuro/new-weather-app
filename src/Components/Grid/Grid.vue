@@ -5,17 +5,16 @@
     import WeatherDetails from './WeatherDetails';
     import DailyForecast from './DailyForecast';
     import LoadingSummary from './LoadingSummary';
+    import LoadingHourlyForecast from './LoadingHourlyForecast';
+    import LoadingWeatherDetails from './LoadingWeatherDetails';
+    import LoadingDailyForecast from './LoadingDailyForecast';
     import NoSearchResultsMessage from './NoSearchResultsMessage';
     import ErrorMessage from './ErrorMessage'
     import useWeatherStore from '@/Store';
     import {storeToRefs} from 'pinia';
 
     const store = useWeatherStore();
-    const {error, noSearchResults, location, loading} = storeToRefs(store);
-
-    /* 
-        this is where i left off, i want to create a separate modularized loading component
-    */
+    const {error, noSearchResults, loading, location} = storeToRefs(store);
 
 </script>
 
@@ -25,8 +24,11 @@
     <NoSearchResultsMessage v-if="noSearchResults"/>
     <section class="grid" v-if="loading">
         <LoadingSummary/>
+        <LoadingHourlyForecast/>
+        <LoadingWeatherDetails/>
+        <LoadingDailyForecast/>
     </section>
-    <section class="grid" v-else>
+    <section class="grid" v-else-if="location">
         <WeatherSummary/>
         <HourlyForecast/>
         <WeatherDetails/>

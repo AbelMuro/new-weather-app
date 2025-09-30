@@ -1,15 +1,13 @@
 <script setup>
     import useWeatherStore from '@/Store';
-    import {storeToRefs} from 'pinia';
-    import {ref, useTemplateRef, watch} from 'vue';
+    import {ref, useTemplateRef} from 'vue';
     import SavedQueries from './SavedQueries';
     import icons from './icons';
 
     const searchQuery = ref('');
     const submitButton = useTemplateRef('submit_button');
     const store = useWeatherStore();
-    const {loading} = storeToRefs(store);
-    const {updateWeather, setError, setNoSearchResults, setLoading} = store;
+    const {updateWeather, setError, setNoSearchResults, setLoading, clearState} = store;
     const apiKey = import.meta.env.VITE_API_KEY;
 
     const handleSearchQuery = (query) => {
@@ -43,18 +41,15 @@
         }
     }
 
-    const handleLoading = (e) => {
-        e.preventDefault();
-        setLoading(true);
-    }
-
     const handleSubmit = async (e) => {
+        e.preventDefault();
+
         try{
             if(!searchQuery.value){
                 setNoSearchResults(true);
                 return;
             }
-
+            setLoading(true);
             const location = await geocode();
             const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&current=temperature_2m,relative_humidity_2m,precipitation,apparent_temperature,wind_speed_10m,weathercode&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,weathercode&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max,weathercode`, {
                 method: 'GET'
@@ -77,16 +72,16 @@
                     localStorage.setItem('saved_searches', JSON.stringify([location.display_name]))
 
                 searchQuery.value = '';
-                setError(false);
                 setNoSearchResults(false);
                 updateWeather({...result, displayName: location.display_name});
             }
             else{
                 const result = await response.text();
                 setNoSearchResults(true);
-                setError(false);
+                clearState();
                 console.log(result);
             }      
+            setError(false);
             setLoading(false);
         }
         catch(error){
@@ -97,18 +92,11 @@
         }
     }
 
-    watch(loading, (loading) => {
-        console.log(loading)
-        if(loading)
-            handleSubmit();        
-
-    }, {flush: 'post'});
-
 </script>
 
 <template>
     <search class="search_container">
-        <form class="search" @submit="handleLoading">
+        <form class="search" @submit="handleSubmit">
             <img class="search_icon" :src="icons['search']">
             <input 
                 type="text" 

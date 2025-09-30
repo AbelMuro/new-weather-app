@@ -6,21 +6,30 @@
     });
 
     const savedSearches = ref([]);
+    const open = ref(false);
 
-    watch(() => search, () => {
+    const handleOpen = () => {
+        open.value = false; 
+    }
+
+    watch(() => search, (search) => {
         if(!search) {
             savedSearches.value = [];
             return;
         }
 
         const prevSearches = JSON.parse(localStorage.getItem('saved_searches')) || [];
+        if(prevSearches && prevSearches.length) open.value = true;
         savedSearches.value = prevSearches;
-    })
+    }, {flush: 'post'})
+
+
+
 </script>
 
 <template>
-    <section class="queries" v-if="search && savedSearches.length">
-        <button type='button' class="queries_query" v-for="(savedSearch) in savedSearches" @click="() => handleSearchQuery(savedSearch)">
+    <section class="queries" v-if="search && savedSearches.length && open">
+        <button type='button' class="queries_query" v-for="(savedSearch) in savedSearches" @click="() => {handleOpen(savedSearch); handleSearchQuery(savedSearch);}">
             {{savedSearch}}
         </button>
     </section>

@@ -118,6 +118,8 @@ const useWeatherStore = defineStore('weather', {
             this.loading = isLoading;
         },
         clearState() {
+            this.error = false;
+            this.loading = false;
             this.location = '';
             this.date = '';
             this.current_temp = '';

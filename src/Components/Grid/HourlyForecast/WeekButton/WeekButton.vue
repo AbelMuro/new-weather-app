@@ -50,7 +50,7 @@
                     <button 
                         class="week_option" 
                         @click="() => handleWeekday('Monday')"
-                        :style="weekday === 'Monday' ? {backgroundColor: '#302F4A'} : {}"
+                        :style="currentDay === 'Monday' ? {backgroundColor: '#302F4A'} : {}"
                         >
                         Monday
                     </button>
@@ -59,7 +59,7 @@
                     <button 
                         class="week_option" 
                         @click="() => handleWeekday('Tuesday')"
-                        :style="weekday === 'Tuesday' ? {backgroundColor: '#302F4A'} : {}"
+                        :style="currentDay === 'Tuesday' ? {backgroundColor: '#302F4A'} : {}"
                         > 
                         Tuesday
                     </button>                
@@ -68,7 +68,7 @@
                     <button 
                         class="week_option" 
                         @click="() => handleWeekday('Wednesday')"
-                        :style="weekday === 'Wednesday' ? {backgroundColor: '#302F4A'} : {}"
+                        :style="currentDay === 'Wednesday' ? {backgroundColor: '#302F4A'} : {}"
                         >
                         Wednesday
                     </button>
@@ -77,7 +77,7 @@
                     <button 
                         class="week_option" 
                         @click="() => handleWeekday('Thursday')"
-                        :style="weekday === 'Thursday' ? {backgroundColor: '#302F4A'} : {}"
+                        :style="currentDay === 'Thursday' ? {backgroundColor: '#302F4A'} : {}"
                         >
                         Thursday
                     </button>
@@ -86,7 +86,7 @@
                     <button 
                         class="week_option" 
                         @click="() => handleWeekday('Friday')"
-                        :style="weekday === 'Friday' ? {backgroundColor: '#302F4A'} : {}"
+                        :style="currentDay === 'Friday' ? {backgroundColor: '#302F4A'} : {}"
                         >
                         Friday
                     </button>
@@ -95,7 +95,7 @@
                     <button 
                         class="week_option" 
                         @click="() => handleWeekday('Saturday')"
-                        :style="weekday === 'Saturday' ? {backgroundColor: '#302F4A'} : {}"
+                        :style="currentDay === 'Saturday' ? {backgroundColor: '#302F4A'} : {}"
                         >
                         Saturday
                     </button>
@@ -104,7 +104,7 @@
                     <button 
                         class="week_option" 
                         @click="() => handleWeekday('Sunday')"
-                        :style="weekday === 'Sunday' ? {backgroundColor: '#302F4A'} : {}"
+                        :style="currentDay === 'Sunday' ? {backgroundColor: '#302F4A'} : {}"
                         >
                         Sunday
                     </button>                

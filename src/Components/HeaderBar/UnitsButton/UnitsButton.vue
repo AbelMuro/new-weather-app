@@ -10,14 +10,14 @@
     const precipitation = ref('precipitation');
     const open = ref(false);
     const store = useWeatherStore();
-    const {convertTempUnits} = store;
+    const {convertTempUnits, convertSpeedUnits} = store;
 
     const handleTemp = (newTemp) => {
         temp.value = newTemp;
     }
 
     const handleSpeed = (newSpeed) => {
-        speed.value = newSpeed
+        speed.value = newSpeed;
     }   
 
     const handlePrecipitation = () => {
@@ -32,8 +32,8 @@
         convertTempUnits(temp); 
     }, {flush: 'post'})
 
-    watch(speed, () => {
-        
+    watch(speed, (speed) => {
+        convertSpeedUnits(speed);
     }, {flush: 'post'})
 
 </script>

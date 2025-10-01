@@ -3,7 +3,7 @@
     import {storeToRefs} from 'pinia';
 
     const store = useWeatherStore();
-    const {feels_like, humidity, wind, precipitation, loading} = storeToRefs(store);
+    const {feels_like, humidity, wind, precipitation} = storeToRefs(store);
 
 </script>
 
@@ -31,7 +31,7 @@
                 Wind
             </h3>
             <strong class="details_data">
-                {{wind}}
+                {{`${wind.speed} ${wind.units}`}}
             </strong>
         </div>
         <div class="details_detail">

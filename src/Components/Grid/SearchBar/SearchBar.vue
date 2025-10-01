@@ -28,33 +28,26 @@
             }
             else{
                 const result = await response.text();
+                console.log(result, 'from geocode function');
                 setNoSearchResults(true);
                 setError(false);
-                return result;
+                return null;
             }
         }
         catch(error){
             const message = error.message;
-            console.log(message);
+            console.log(message, 'from geocode function');
             setError(true);
-            throw new Error(message);
+            return null;
         }
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const weatherData = async (location) => {
+        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&current=temperature_2m,relative_humidity_2m,precipitation,apparent_temperature,wind_speed_10m,weathercode&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,weathercode&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max,weathercode`, {
+            method: 'GET'
+        });
 
         try{
-            if(!searchQuery.value){
-                setNoSearchResults(true);
-                return;
-            }
-            setLoading(true);
-            const location = await geocode();
-            const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&current=temperature_2m,relative_humidity_2m,precipitation,apparent_temperature,wind_speed_10m,weathercode&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,weathercode&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max,weathercode`, {
-                method: 'GET'
-            });
-
             if(response.status === 200){
                 const result = await response.json();
                 const prevSearches = JSON.parse(localStorage.getItem('saved_searches'));
@@ -75,7 +68,7 @@
                 dispatchEvent(event);
                 handleSearchQuery('');
                 setNoSearchResults(false);
-                updateWeather({...result, displayName: location.display_name});
+                return {...result, displayName: location.display_name}
             }
             else{
                 const result = await response.text();
@@ -85,19 +78,41 @@
             }      
             setError(false);
             setLoading(false);
+            return null
         }
+
         catch(error){
             const message = error.message;
-            setError(true);
-            setLoading(false);
             console.log(message);
+            setError(false);
+            setLoading(false);
+            return null
         }
+
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if(!searchQuery.value){
+            setNoSearchResults(true);
+            return;
+        }
+        setLoading(true);
+        const location = await geocode();
+        if(!location) {
+            setLoading(false);
+            setNoSearchResults(true);
+            return;
+        }
+        const weather = await weatherData(location);
+        if(!weather)return;
+        updateWeather(weather);            
     }
 
 </script>
 
 <template>
-    <search class="search_container">
         <form class="search" @submit="handleSubmit">
             <img class="search_icon" :src="icons['search']">
             <input 
@@ -110,19 +125,14 @@
             </button>
             <SavedQueries :search="searchQuery" :handleSearchQuery="handleSearchQuery"/>            
         </form>
-    </search>
 </template>
 
 <style scoped>
-    .search_container{
+    .search{
         grid-column: 1/3;
         grid-row: 1/2;
-        margin-bottom: 48px;        
-    }
-
-    .search{
+        margin: 0px auto 48px auto;  
         width: 656px;
-        margin: auto;
         position: relative;
         display: flex;
         justify-content: center;
@@ -192,12 +202,9 @@
     }
 
     @media(max-width: 940px){
-        .search_container{
-            margin-bottom: 32px;
-        }
-
         .search{
             width: 90%;
+            margin: 0px auto 32px auto;
         }
 
         .search > input{
@@ -206,7 +213,6 @@
     }
 
     @media(max-width: 600px){
-
         .search{
             width: 95%;
             flex-direction: column;

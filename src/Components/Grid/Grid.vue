@@ -20,8 +20,6 @@
 
 <template>
     <SearchBar v-if="!error"/>
-    <ErrorMessage v-else/>
-    <NoSearchResultsMessage v-if="noSearchResults"/>
     <section class="grid" v-if="loading">
         <LoadingSummary/>
         <LoadingHourlyForecast/>
@@ -34,7 +32,8 @@
         <WeatherDetails/>
         <DailyForecast/>        
     </section>
-
+    <ErrorMessage v-else-if="error"/>
+    <NoSearchResultsMessage v-else-if="noSearchResults"/>
 </template>
 
 <style scoped>

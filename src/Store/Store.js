@@ -47,7 +47,10 @@ const useWeatherStore = defineStore('weather', {
         condition: '',
         feels_like: '',
         humidity: '',
-        wind: '',
+        wind: {
+            speed: 0,
+            units: ''
+        },
         precipitation: '',
         hourly_forecast: {
             current_day: 'Monday',
@@ -63,7 +66,6 @@ const useWeatherStore = defineStore('weather', {
     }),
     actions: {
         updateWeather(weather) {
-            console.log(weather)
             this.clearState();
             const current = weather.current;
             const units = weather.current_units;
@@ -78,7 +80,8 @@ const useWeatherStore = defineStore('weather', {
             this.location = weather.displayName;
             this.current_temp = current.temperature_2m;
             this.date = new Date(current.time);
-            this.wind = `${current.wind_speed_10m} ${units.wind_speed_10m}`;  
+            this.wind.speed = current.wind_speed_10m;
+            this.wind.units = units.wind_speed_10m;  
             for(let i = 0; i < hourly.temperature_2m.length; i++){
                 const date = new Date(hourly.time[i]);
                 const day = days[date.getDay()];
@@ -159,7 +162,17 @@ const useWeatherStore = defineStore('weather', {
                     this.daily_forecast[i].min = ((min - 32) / (9/5)).toFixed(1);
                 }
             }
-            convert
+        },
+        convertSpeedUnits(speed){
+            if(this.current_temp) return;
+            if(speed === 'km/h'){
+                this.wind.speed = (this.wind.speed * 1.609344).toFixed(1);
+                this.wind.units = 'km/h';
+            }
+            else{
+                this.wind.speed = (this.wind.speed / 1.609344).toFixed(1);
+                this.wind.units = 'mph';
+            }
         },
         clearState() {
             this.error = false;
@@ -170,7 +183,10 @@ const useWeatherStore = defineStore('weather', {
             this.condition = '';
             this.feels_like = '';
             this.humidity = '';
-            this.wind = '';
+            this.wind = {
+                speed: 0,
+                units: ''
+            };
             this.precipitation = '';
             this.hourly_forecast = {
                 current_day: 'Monday',

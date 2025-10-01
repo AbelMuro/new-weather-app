@@ -3,8 +3,7 @@
     import Grid from './Components/Grid';
     import DisplayTitle from './Components/DisplayTitle';
     /* 
-        this is where i left off, i need to implemenent the logic for the 
-        units button component, more specifically, converting km/h to mph 
+        this is where i left off, i need to optimize the code in the SearchBar component
     */
 </script>
 
@@ -13,7 +12,6 @@
     <DisplayTitle/>
     <Grid/>
 
-    
 </template>
 
 <style>

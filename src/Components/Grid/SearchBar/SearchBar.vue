@@ -5,7 +5,7 @@
     import icons from './icons';
 
     const searchQuery = ref('');
-    const submitButton = useTemplateRef('submit_button');
+    const submitButton = useTemplateRef('submit');
     const store = useWeatherStore();
     const {updateWeather, setError, setNoSearchResults, setLoading, clearState} = store;
     const apiKey = import.meta.env.VITE_API_KEY;
@@ -71,15 +71,17 @@
                 else if(!prevSearches)
                     localStorage.setItem('saved_searches', JSON.stringify([location.display_name]))
 
-                searchQuery.value = '';
+                const event = new Event('change_local_storage');
+                dispatchEvent(event);
+                handleSearchQuery('');
                 setNoSearchResults(false);
                 updateWeather({...result, displayName: location.display_name});
             }
             else{
                 const result = await response.text();
+                console.log(result);
                 setNoSearchResults(true);
                 clearState();
-                console.log(result);
             }      
             setError(false);
             setLoading(false);
@@ -103,7 +105,7 @@
                 v-model="searchQuery"
                 placeholder="Search for a place..."
                 />
-            <button class="search_button" ref="submit_button">
+            <button class="search_button" ref="submit">
                 Search
             </button>
             <SavedQueries :search="searchQuery" :handleSearchQuery="handleSearchQuery"/>            

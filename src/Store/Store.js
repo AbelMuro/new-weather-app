@@ -38,6 +38,10 @@ const getCondition = (code) => {
 
 const useWeatherStore = defineStore('weather', {
     state: () => ({
+        units: {
+            temp: 'fahrenheit',
+            speed: 'km/h'
+        },
         error: false,
         loading: false,
         noSearchResults: false,
@@ -116,6 +120,10 @@ const useWeatherStore = defineStore('weather', {
         },
         setLoading(isLoading){
             this.loading = isLoading;
+        },
+        setUnits(temp, speed) {
+            this.units.temp = temp;
+            this.units.speed = speed;
         },
         clearState() {
             this.error = false;

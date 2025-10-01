@@ -1,5 +1,6 @@
 <script setup>
-    import {ref} from 'vue';
+    import {ref, watchEffect} from 'vue';
+    import useWeatherStore from '@/Store';
     import icons from './icons';
     import globalIcons from '@/assets/icons'
     import {motion, AnimatePresence} from 'motion-v';
@@ -8,6 +9,8 @@
     const speed = ref('km/h');
     const precipitation = ref('precipitation');
     const open = ref(false);
+    const store = useWeatherStore();
+    const {setUnits} = store;
 
     const handleTemp = (newTemp) => {
         temp.value = newTemp;
@@ -24,6 +27,10 @@
     const handleOpen = () => {
         open.value = !open.value;
     }
+
+    watchEffect(() => {
+        setUnits(temp.value, speed.value); 
+    })
 
 </script>
 

@@ -4,12 +4,12 @@
     import HourlyForecast from './HourlyForecast'; 
     import WeatherDetails from './WeatherDetails';
     import DailyForecast from './DailyForecast';
-    import LoadingSummary from './LoadingSummary';
-    import LoadingHourlyForecast from './LoadingHourlyForecast';
-    import LoadingWeatherDetails from './LoadingWeatherDetails';
-    import LoadingDailyForecast from './LoadingDailyForecast';
-    import NoSearchResultsMessage from './NoSearchResultsMessage';
-    import ErrorMessage from './ErrorMessage'
+    import LoadingSummary from './Loading/LoadingSummary';
+    import LoadingHourlyForecast from './Loading/LoadingHourlyForecast';
+    import LoadingWeatherDetails from './Loading/LoadingWeatherDetails';
+    import LoadingDailyForecast from './Loading/LoadingDailyForecast';
+    import NoSearchResultsMessage from './Messages/NoSearchResultsMessage';
+    import ErrorMessage from './Messages/ErrorMessage'
     import useWeatherStore from '@/Store';
     import {storeToRefs} from 'pinia';
 

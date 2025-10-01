@@ -1,35 +1,32 @@
 <script setup>
     import {watch, ref} from 'vue';
+    import { useLocalStorage } from '@/Hooks';
+
     const {search, handleSearchQuery} = defineProps({
         search: String,
         handleSearchQuery: Function
     });
 
-    const savedSearches = ref([]);
+    const [savedSearches] = useLocalStorage('saved_searches');
     const open = ref(false);
 
-    const handleOpen = () => {
-        open.value = false; 
+    const handleQuery = (savedSearch) => {
+        open.value = false;
+        handleSearchQuery(savedSearch);
     }
 
     watch(() => search, (search) => {
-        if(!search) {
-            savedSearches.value = [];
-            return;
-        }
+        if(!search || savedSearches.value.includes(search)) return;
 
-        const prevSearches = JSON.parse(localStorage.getItem('saved_searches')) || [];
-        if(prevSearches && prevSearches.length) open.value = true;
-        savedSearches.value = prevSearches;
+        open.value = true;
     }, {flush: 'post'})
-
 
 
 </script>
 
 <template>
-    <section class="queries" v-if="search && savedSearches.length && open">
-        <button type='button' class="queries_query" v-for="(savedSearch) in savedSearches" @click="() => {handleOpen(savedSearch); handleSearchQuery(savedSearch);}">
+    <section class="queries" v-if="open">
+        <button class="queries_query" v-for="(savedSearch) in savedSearches" @click="() => handleQuery(savedSearch)">
             {{savedSearch}}
         </button>
     </section>

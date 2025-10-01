@@ -2,13 +2,18 @@
     import HeaderBar from './Components/HeaderBar';
     import Grid from './Components/Grid';
     import DisplayTitle from './Components/DisplayTitle';
-
+    /* 
+        this is where i left off, i need to implemenent the logic for the 
+        units button component, more specifically, converting km/h to mph 
+    */
 </script>
 
 <template>
     <HeaderBar/>
     <DisplayTitle/>
     <Grid/>
+
+    
 </template>
 
 <style>

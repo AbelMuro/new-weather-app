@@ -25,7 +25,7 @@
             {{hour.hour}}
         </div>
         <p class="temp_degree">
-            {{hour.temp}}
+            {{`${hour.temp} ${hour.unit}`}}
         </p>
     </div>
 </template>

@@ -38,10 +38,6 @@ const getCondition = (code) => {
 
 const useWeatherStore = defineStore('weather', {
     state: () => ({
-        units: {
-            temp: 'fahrenheit',
-            speed: 'km/h'
-        },
         error: false,
         loading: false,
         noSearchResults: false,
@@ -67,6 +63,7 @@ const useWeatherStore = defineStore('weather', {
     }),
     actions: {
         updateWeather(weather) {
+            console.log(weather)
             this.clearState();
             const current = weather.current;
             const units = weather.current_units;
@@ -90,7 +87,8 @@ const useWeatherStore = defineStore('weather', {
                 hour =  hour % 12;
                 hour = hour ? hour : 12;
                 this.hourly_forecast[day].push({
-                    temp: `${hourly.temperature_2m[i]} ${hourly_units.temperature_2m}`,
+                    temp: hourly.temperature_2m[i],
+                    unit: hourly_units.temperature_2m,
                     hour: `${hour} ${time}`,       
                     condition: getCondition(hourly.weathercode[i])             
                 })              
@@ -121,9 +119,47 @@ const useWeatherStore = defineStore('weather', {
         setLoading(isLoading){
             this.loading = isLoading;
         },
-        setUnits(temp, speed) {
-            this.units.temp = temp;
-            this.units.speed = speed;
+        convertTempUnits(temp) {
+            if(!this.current_temp) return;
+            if(temp === 'fahrenheit'){
+                this.current_temp = ((this.current_temp * 1.8) + 32).toFixed(1);
+                this.feels_like = ((this.feels_like * 1.8) + 32).toFixed(1);
+                for(let [day, temp] of Object.entries(this.hourly_forecast)){
+                    if(day === 'current_day') continue;
+                    for(let i = 0; i < temp.length; i++){
+                        const temperature = temp[i].temp;
+                        this.hourly_forecast[day][i].unit = 'F'
+                        this.hourly_forecast[day][i].temp = ((temperature * 1.8) + 32).toFixed(1);
+                    }                    
+                }
+
+                for(let i = 0; i < this.daily_forecast.length; i++){
+                    const max = this.daily_forecast[i].max;
+                    const min = this.daily_forecast[i].min;
+                    this.daily_forecast[i].max = ((max * 1.8) + 32).toFixed(1);
+                    this.daily_forecast[i].min = ((min * 1.8) + 32).toFixed(1);
+                }
+            }
+            else{
+                this.current_temp = ((this.current_temp - 32) / (9/5)).toFixed(1);
+                this.feels_like = ((this.feels_like - 32) / (9/5)).toFixed(1);
+                for(let [day, temp] of Object.entries(this.hourly_forecast)){
+                    if(day === 'current_day') continue;
+                    for(let i = 0; i < temp.length; i++){
+                        const temperature = temp[i].temp;
+                        this.hourly_forecast[day][i].unit = 'C';
+                        this.hourly_forecast[day][i].temp = ((temperature - 32) / (9/5)).toFixed(1);
+                    }                    
+                }
+  
+                for(let i = 0; i < this.daily_forecast.length; i++){
+                    const max = this.daily_forecast[i].max;
+                    const min = this.daily_forecast[i].min;
+                    this.daily_forecast[i].max = ((max - 32) / (9/5)).toFixed(1);
+                    this.daily_forecast[i].min = ((min - 32) / (9/5)).toFixed(1);
+                }
+            }
+            convert
         },
         clearState() {
             this.error = false;

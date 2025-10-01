@@ -1,5 +1,6 @@
 <script setup>
     import useWeatherStore from '@/Store';
+    import {computed} from 'vue';
     import {storeToRefs} from 'pinia';
     import icons from '@/assets/icons';
 
@@ -12,7 +13,7 @@
     const month = date.getMonth();
     const dayOfMonth = date.getDate();
     const year = date.getFullYear();
-    const fullDate = `${week[dayOfWeek - 1]}, ${months[month]} ${dayOfMonth}, ${year}`
+    const fullDate = `${week[dayOfWeek - 1]}, ${months[month]} ${dayOfMonth}, ${year}`;
 
 </script>
 

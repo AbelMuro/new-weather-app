@@ -1,19 +1,10 @@
 <script setup>
     import useWeatherStore from '@/Store';
     import {storeToRefs} from 'pinia';
-    import {computed} from 'vue';
     import icons from '@/assets/icons';
 
     const store = useWeatherStore();
-    const {daily_forecast, loading, units} = storeToRefs(store);
-    const temperature = computed(() => {
-        return units.value.temperature;
-    })
-
-    /* 
-        this is where i left off, i need to get the units property from the global state
-        and convert fahrenheit to celsius and km/h to mph
-    */
+    const {daily_forecast, loading} = storeToRefs(store);
 
 </script>
 
@@ -24,7 +15,6 @@
         </h2>
         <div class="daily_list">
             <article class="daily_weather" v-for="() in 7" v-if="loading"></article>
-
             <article class="daily_weather" v-for="(day, _) in daily_forecast" v-else>
                 <h3 class="daily_day">
                     {{day.day.slice(0, 3)}}

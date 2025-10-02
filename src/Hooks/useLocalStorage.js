@@ -4,7 +4,8 @@ function useLocalStorage(item) {
     const savedQueries = ref(JSON.parse(localStorage.getItem(item)) || []);
 
     const handleLocalStorage = () => {
-        savedQueries = JSON.parse(localStorage.getItem(item));
+        console.log('hello world')
+        savedQueries.value = JSON.parse(localStorage.getItem(item));
     }    
 
     onMounted(() => {

@@ -175,8 +175,6 @@ const useWeatherStore = defineStore('weather', {
             }
         },
         clearState() {
-            this.error = false;
-            this.loading = false;
             this.location = '';
             this.date = '';
             this.current_temp = '';

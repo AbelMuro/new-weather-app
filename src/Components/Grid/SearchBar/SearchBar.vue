@@ -1,18 +1,35 @@
 <script setup>
     import useWeatherStore from '@/Store';
+    import {storeToRefs} from 'pinia';
+    import {VueSpinner} from 'vue3-spinners';
     import {ref, useTemplateRef} from 'vue';
     import SavedQueries from './SavedQueries';
     import icons from './icons';
 
     const searchQuery = ref('');
+    const openSavedQueries = ref(false);
     const submitButton = useTemplateRef('submit');
     const store = useWeatherStore();
+    const {loading} = storeToRefs(store);
     const {updateWeather, setError, setNoSearchResults, setLoading, clearState} = store;
     const apiKey = import.meta.env.VITE_API_KEY;
+
+    const formatLocation = (name) => {
+        const location = name.split(', ');
+        return `${location[0]}, ${location[location.length - 1]}`
+    }
 
     const handleSearchQuery = (query) => {
         searchQuery.value = query;
         submitButton.value.click();
+    }
+
+    const handleFocus = () => {
+        openSavedQueries.value = true;
+    }
+
+    const handleBlur = () => {
+        openSavedQueries.value = false;
     }
 
     const geocode = async () => {
@@ -20,75 +37,83 @@
             const response = await fetch(`https://geocode.maps.co/search?q=${searchQuery.value}&api_key=${apiKey}`, {
                 method: 'GET'
             });
+
             if(response.status === 200){
                 const result = await response.json();
-                setNoSearchResults(false);
-                setError(false);
-                return result[0]
+
+                if(result.length){
+                    setNoSearchResults(false);
+                    setError(false);
+                    return result[0];                    
+                }
+                else{
+                    setNoSearchResults(true);
+                    setError(false);
+                    return null;
+                }
             }
-            else{
+            else {
                 const result = await response.text();
-                console.log(result, 'from geocode function');
-                setNoSearchResults(true);
-                setError(false);
+                console.log('Internal Server error has ocurred: ', result);
+                setNoSearchResults(false);
+                setError(true);
                 return null;
             }
         }
         catch(error){
             const message = error.message;
-            console.log(message, 'from geocode function');
+            console.log('Server is offline: ', message);
+            setNoSearchResults(false);
             setError(true);
             return null;
         }
     }
 
     const weatherData = async (location) => {
-        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&current=temperature_2m,relative_humidity_2m,precipitation,apparent_temperature,wind_speed_10m,weathercode&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,weathercode&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max,weathercode`, {
-            method: 'GET'
-        });
-
         try{
+            const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&current=temperature_2m,relative_humidity_2m,precipitation,apparent_temperature,wind_speed_10m,weathercode&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,weathercode&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max,weathercode`, {
+                method: 'GET'
+            });
+
             if(response.status === 200){
                 const result = await response.json();
                 const prevSearches = JSON.parse(localStorage.getItem('saved_searches'));
-                if(prevSearches && !prevSearches.includes(location.display_name)){
+                const formatedLocationName = formatLocation(location.display_name)
+                if(prevSearches && !prevSearches.includes(formatedLocationName)){
                     if(prevSearches.length > 4) {
-                        prevSearches.unshift(location.display_name);
+                        prevSearches.unshift(formatedLocationName);
                         prevSearches.pop();
                         localStorage.setItem('saved_searches', JSON.stringify(prevSearches)); 
                     }
                     else
-                        localStorage.setItem('saved_searches', JSON.stringify([location.display_name, ...prevSearches])); 
+                        localStorage.setItem('saved_searches', JSON.stringify([formatedLocationName, ...prevSearches])); 
                 }
                     
                 else if(!prevSearches)
-                    localStorage.setItem('saved_searches', JSON.stringify([location.display_name]))
+                    localStorage.setItem('saved_searches', JSON.stringify([formatedLocationName]))
 
-                const event = new Event('change_local_storage');
-                dispatchEvent(event);
+                const event = new CustomEvent('change_local_storage');
+                document.dispatchEvent(event);
                 handleSearchQuery('');
                 setNoSearchResults(false);
-                return {...result, displayName: location.display_name}
+                setError(false);
+                return {...result, displayName: formatedLocationName}
             }
             else{
                 const result = await response.text();
                 console.log(result);
                 setNoSearchResults(true);
-                clearState();
-            }      
-            setError(false);
-            setLoading(false);
-            return null
+                setError(false);
+                return null
+            }         
         }
-
         catch(error){
             const message = error.message;
-            console.log(message);
-            setError(false);
-            setLoading(false);
+            console.log('Server is offline: ', message);
+            setNoSearchResults(false);            
+            setError(true);
             return null
         }
-
     }
 
     const handleSubmit = async (e) => {
@@ -96,18 +121,24 @@
 
         if(!searchQuery.value){
             setNoSearchResults(true);
+            setError(false);
             return;
         }
         setLoading(true);
         const location = await geocode();
         if(!location) {
+            clearState();
             setLoading(false);
-            setNoSearchResults(true);
             return;
-        }
+        };
         const weather = await weatherData(location);
-        if(!weather)return;
-        updateWeather(weather);            
+        if(!weather) {
+            clearState();
+            setLoading(false);
+            return;
+        };
+        updateWeather(weather);   
+        setLoading(false);         
     }
 
 </script>
@@ -119,11 +150,14 @@
                 type="text" 
                 v-model="searchQuery"
                 placeholder="Search for a place..."
+                @focus="handleFocus"
+                @blur="handleBlur"
                 />
             <button class="search_button" ref="submit">
-                Search
+                {{!loading ? 'Search' : ''}}
+                 <VueSpinner v-if="loading" size="30" color="white"/>
             </button>
-            <SavedQueries :search="searchQuery" :handleSearchQuery="handleSearchQuery"/>            
+            <SavedQueries :search="searchQuery" :handleSearchQuery="handleSearchQuery" :openSavedQueries="openSavedQueries"/>            
         </form>
 </template>
 

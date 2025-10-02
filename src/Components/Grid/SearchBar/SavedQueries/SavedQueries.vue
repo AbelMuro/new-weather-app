@@ -1,32 +1,45 @@
 <script setup>
-    import {watch, ref} from 'vue';
+    import {watchEffect, ref} from 'vue';
     import { useLocalStorage } from '@/Hooks';
 
-    const {search, handleSearchQuery} = defineProps({
+    const {search, handleSearchQuery, openSavedQueries} = defineProps({
         search: String,
-        handleSearchQuery: Function
+        handleSearchQuery: Function,
+        openSavedQueries: Boolean
     });
 
     const [savedSearches] = useLocalStorage('saved_searches');
-    const open = ref(false);
+    const displaySavedSearches = ref([]);
 
     const handleQuery = (savedSearch) => {
-        open.value = false;
         handleSearchQuery(savedSearch);
     }
 
-    watch(() => search, (search) => {
-        if(!search || savedSearches.value.includes(search)) return;
 
-        open.value = true;
+    watchEffect(() => {
+        if(!openSavedQueries) return;
+        if(!search) {
+            displaySavedSearches.value = [];
+            return;
+        };
+        
+        const saved = [];
+
+        for(let i = 0; i < savedSearches.value.length; i++){
+            const currentSaved = savedSearches.value[i].toLowerCase();
+            if(currentSaved.startsWith(search.toLowerCase()))
+                saved.push(savedSearches.value[i]);
+        }
+        displaySavedSearches.value = saved;
+
     }, {flush: 'post'})
 
 
 </script>
 
 <template>
-    <section class="queries" v-if="open">
-        <button class="queries_query" v-for="(savedSearch) in savedSearches" @click="() => handleQuery(savedSearch)">
+    <section class="queries" v-if="openSavedQueries && displaySavedSearches.length">
+        <button type="button" class="queries_query" v-for="(savedSearch) in displaySavedSearches" @mousedown="() => handleQuery(savedSearch)">
             {{savedSearch}}
         </button>
     </section>

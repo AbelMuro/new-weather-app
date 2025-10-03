@@ -1,16 +1,25 @@
 <script setup>
-    import {ref, watch} from 'vue';
+    import {ref, watch, onMounted, onUnmounted} from 'vue';
     import useWeatherStore from '@/Store';
     import icons from './icons';
     import globalIcons from '@/assets/icons'
     import {motion, AnimatePresence} from 'motion-v';
+    import { storeToRefs } from 'pinia';
 
     const temp = ref('celsius');
     const speed = ref('km/h');
     const precipitation = ref('precipitation');
     const open = ref(false);
     const store = useWeatherStore();
-    const {convertTempUnits, convertSpeedUnits} = store;
+    const {wind, current_temp} = storeToRefs(store);
+    const {convertTempUnits, convertSpeedUnits, setWindSpeedUnits, setTempUnits} = store;
+
+    const handleClick = (e) => {
+        if(e.target.classList.contains('units')) return;
+        if(e.target.classList.contains('arrow')) return;
+        if(e.target.classList.contains('gear')) return;
+        open.value = false;
+    }
 
     const handleTemp = (newTemp) => {
         temp.value = newTemp;
@@ -25,16 +34,28 @@
     }
 
     const handleOpen = () => {
+        if(!current_temp.value) return
+        if(!wind.value.speed) return;
         open.value = !open.value;
     }
 
     watch(temp, (temp) => {
-        convertTempUnits(temp); 
+        setTempUnits(temp);
+        //convertTempUnits(temp); 
     }, {flush: 'post'})
 
     watch(speed, (speed) => {
-        convertSpeedUnits(speed);
+        setWindSpeedUnits(speed);
+        //convertSpeedUnits(speed);
     }, {flush: 'post'})
+
+    onMounted(() => {
+        document.addEventListener('click', handleClick) 
+    })
+
+    onUnmounted(() => {
+        document.removeEventListener('click', handleClick)
+    })
 
 </script>
 

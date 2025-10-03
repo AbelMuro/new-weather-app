@@ -10,8 +10,6 @@ const days = [
     'Sunday'
 ];
 
-
-
 const getCondition = (code) => {
     const weathercodes = {
         "sunny" : [0, 1],
@@ -34,8 +32,6 @@ const getCondition = (code) => {
 }
 
 
-
-
 const useWeatherStore = defineStore('weather', {
     state: () => ({
         error: false,
@@ -47,6 +43,10 @@ const useWeatherStore = defineStore('weather', {
         condition: '',
         feels_like: '',
         humidity: '',
+        units: {
+            wind_speed: '',
+            temp: ''
+        },
         wind: {
             speed: 0,
             units: ''
@@ -164,7 +164,8 @@ const useWeatherStore = defineStore('weather', {
             }
         },
         convertSpeedUnits(speed){
-            if(this.current_temp) return;
+            if(!this.wind.speed) return;
+
             if(speed === 'km/h'){
                 this.wind.speed = (this.wind.speed * 1.609344).toFixed(1);
                 this.wind.units = 'km/h';
@@ -173,6 +174,12 @@ const useWeatherStore = defineStore('weather', {
                 this.wind.speed = (this.wind.speed / 1.609344).toFixed(1);
                 this.wind.units = 'mph';
             }
+        },
+        setWindSpeedUnits(unit) {
+            this.units.wind_speed = unit;
+        },
+        setTempUnits(unit) {
+            this.units.temp = unit;
         },
         clearState() {
             this.location = '';

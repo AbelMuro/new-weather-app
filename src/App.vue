@@ -2,8 +2,13 @@
     import HeaderBar from './Components/HeaderBar';
     import Grid from './Components/Grid';
     import DisplayTitle from './Components/DisplayTitle';
+
     /* 
-        this is where i left off, i need to optimize the code in the SearchBar component
+        this is where i left off, i need to continue refactoring the system 
+        i made for the conversion of units of temperature and wind speed for the UnitsButton
+        component
+
+        im currently in the DailyForecast component
     */
 </script>
 
@@ -11,7 +16,6 @@
     <HeaderBar/>
     <DisplayTitle/>
     <Grid/>
-
 </template>
 
 <style>

@@ -1,9 +1,18 @@
 <script setup>
     import useWeatherStore from '@/Store';
+    import {computed} from 'vue';
     import {storeToRefs} from 'pinia';
 
     const store = useWeatherStore();
     const {feels_like, humidity, wind, precipitation} = storeToRefs(store);
+
+    const speed = computed(() => {
+        return wind.value.speed;
+    })
+
+    const units = computed(() => {
+        return wind.value.units;
+    })
 
 </script>
 
@@ -31,7 +40,7 @@
                 Wind
             </h3>
             <strong class="details_data">
-                {{`${wind.speed} ${wind.units}`}}
+                {{`${speed} ${units}`}}
             </strong>
         </div>
         <div class="details_detail">

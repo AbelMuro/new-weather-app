@@ -1,10 +1,18 @@
 <script setup>
     import useWeatherStore from '@/Store';
+    import {computed} from 'vue';
     import {storeToRefs} from 'pinia';
     import icons from '@/assets/icons';
 
     const store = useWeatherStore();
-    const {daily_forecast, loading} = storeToRefs(store);
+    const {daily_forecast, loading, units} = storeToRefs(store);
+
+    const convertUnits = (temp) => {
+        if(units.value.temp === 'fahrenheit')
+            return ((temp * 1.8) + 32).toFixed(1);
+        else
+            return ((temp - 32) / (9/5)).toFixed(1);
+    }
 
 </script>
 
@@ -21,10 +29,10 @@
                 </h3>
                 <img class="daily_icon" :src="icons[day.condition]">
                 <p class="daily_high">
-                    {{day.max}}
+                    {{convertUnits(day.max)}}
                 </p>
                 <p class="daily_low">
-                    {{day.min}}
+                    {{convertUnits(day.min)}}
                 </p>
             </article>  
         </div>

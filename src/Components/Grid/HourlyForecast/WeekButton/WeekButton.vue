@@ -1,7 +1,7 @@
 <script setup>
     import useWeatherStore from '@/Store';
     import {storeToRefs} from 'pinia';
-    import {ref, computed} from 'vue';
+    import {ref, computed, onMounted, onUnmounted} from 'vue';
     import {motion, AnimatePresence} from 'motion-v';
     import icons from '@/assets/icons';
 
@@ -9,6 +9,12 @@
     const store = useWeatherStore();
     const {hourly_forecast} = storeToRefs(store);
     const {setCurrentDay} = store;
+
+    const handleClick = (e) => {
+        if(e.target.classList.contains('week')) return
+        if(e.target.classList.contains('week_arrow')) return;
+        open.value = false;
+    }
 
     const currentDay = computed(() => {
         return hourly_forecast.value.current_day;
@@ -22,6 +28,14 @@
         setCurrentDay(day);
         handleOpen();
     } 
+
+    onMounted(() => {
+        document.addEventListener('click', handleClick)
+    })
+
+    onUnmounted(() => {
+        document.removeEventListener('click', handleClick)
+    })
 
 </script>
 

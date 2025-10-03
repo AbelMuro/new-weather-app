@@ -27,9 +27,9 @@
 
     watch(windUnit, (speed) => {
         if(speed === 'km/h')
-           windSpeed.value = (Number(windSpeed.value) * 1.609344).toFixed(1);
+           windSpeed.value = (Number(windSpeed.value) * 1.609344).toFixed(0);
         else
-           windSpeed.value = (Number(windSpeed.value) / 1.609344).toFixed(1);
+           windSpeed.value = (Number(windSpeed.value) / 1.609344).toFixed(0);
     })
 
 </script>

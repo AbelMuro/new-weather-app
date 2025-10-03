@@ -65,19 +65,17 @@ const useWeatherStore = defineStore('weather', {
         updateWeather(weather) {
             this.clearState();
             const current = weather.current;
-            const units = weather.current_units;
             const hourly = weather.hourly;
-            const hourly_units = weather.hourly_units;
             const daily = weather.daily;
             const daily_units = weather.daily_units;
             const weathercode = current.weathercode;
-            this.feels_like = current.apparent_temperature;
+            this.feels_like = Math.round(current.apparent_temperature);
             this.precipitation = current.precipitation;
             this.humidity = current.relative_humidity_2m;
             this.location = weather.displayName;
-            this.current_temp = current.temperature_2m;
+            this.current_temp = Math.round(current.temperature_2m);
             this.date = new Date(current.time);
-            this.wind_speed = current.wind_speed_10m;
+            this.wind_speed = Math.round(current.wind_speed_10m);
             for(let i = 0; i < hourly.temperature_2m.length; i++){
                 const date = new Date(hourly.time[i]);
                 const day = days[date.getDay()];
@@ -86,8 +84,7 @@ const useWeatherStore = defineStore('weather', {
                 hour =  hour % 12;
                 hour = hour ? hour : 12;
                 this.hourly_forecast[day].push({
-                    temp: hourly.temperature_2m[i],
-                    unit: hourly_units.temperature_2m,
+                    temp: Math.round(hourly.temperature_2m[i]),
                     hour: `${hour} ${time}`,       
                     condition: getCondition(hourly.weathercode[i])             
                 })              
@@ -98,8 +95,8 @@ const useWeatherStore = defineStore('weather', {
                 const day = days[date.getDay()];
                 this.daily_forecast.push({
                         precipitation: `${daily.precipitation_sum[i]} ${daily_units.precipitation_sum}`,
-                        max: `${daily.temperature_2m_max[i]}`,
-                        min: `${daily.temperature_2m_min[i]}`,
+                        max: `${Math.round(daily.temperature_2m_max[i])}`,
+                        min: `${Math.round(daily.temperature_2m_min[i])}`,
                         day,
                         condition: getCondition(daily.weathercode[i])
                 });                

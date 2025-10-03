@@ -1,17 +1,35 @@
 <script setup>
     import useWeatherStore from '@/Store';
-    import {computed} from 'vue';
+    import {computed, watch, ref} from 'vue';
     import {storeToRefs} from 'pinia';
 
-    const store = useWeatherStore();
-    const {feels_like, humidity, wind, precipitation} = storeToRefs(store);
 
-    const speed = computed(() => {
-        return wind.value.speed;
+    const store = useWeatherStore();
+    const {feels_like, humidity, wind_speed, precipitation, units} = storeToRefs(store);
+    const temperature = ref(feels_like.value); 
+    const windSpeed = ref(wind_speed.value);   
+
+
+    const tempUnit = computed(() => {
+        return units.value.temp
     })
 
-    const units = computed(() => {
-        return wind.value.units;
+    const windUnit = computed(() => {
+        return units.value.wind_speed;
+    });
+
+    watch(tempUnit, (temp) => {
+        if(temp === 'fahrenheit')
+            temperature.value = ((Number(temperature.value) * 1.8) + 32).toFixed(0);
+        else
+            temperature.value = (((Number(temperature.value)- 32)*5)/9).toFixed(0);
+    }, {flush: 'post'});
+
+    watch(windUnit, (speed) => {
+        if(speed === 'km/h')
+           windSpeed.value = (Number(windSpeed.value) * 1.609344).toFixed(1);
+        else
+           windSpeed.value = (Number(windSpeed.value) / 1.609344).toFixed(1);
     })
 
 </script>
@@ -23,7 +41,7 @@
                 Feels Like
             </h3>
             <strong class="details_data">
-                {{feels_like}}°
+                {{temperature}}°
             </strong>
         </div>
 
@@ -40,7 +58,7 @@
                 Wind
             </h3>
             <strong class="details_data">
-                {{`${speed} ${units}`}}
+                {{`${windSpeed} ${windUnit}`}}
             </strong>
         </div>
         <div class="details_detail">

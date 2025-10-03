@@ -1,18 +1,16 @@
 <script setup>
     import useWeatherStore from '@/Store';
-    import {computed} from 'vue';
     import {storeToRefs} from 'pinia';
+    import {computed} from 'vue';
     import icons from '@/assets/icons';
+    import DisplayMaxMinTemps from './DisplayMaxMinTemps';
 
     const store = useWeatherStore();
     const {daily_forecast, loading, units} = storeToRefs(store);
 
-    const convertUnits = (temp) => {
-        if(units.value.temp === 'fahrenheit')
-            return ((temp * 1.8) + 32).toFixed(1);
-        else
-            return ((temp - 32) / (9/5)).toFixed(1);
-    }
+    const unit = computed(() => {
+        return units.value.temp;
+    })
 
 </script>
 
@@ -28,12 +26,7 @@
                     {{day.day.slice(0, 3)}}
                 </h3>
                 <img class="daily_icon" :src="icons[day.condition]">
-                <p class="daily_high">
-                    {{convertUnits(day.max)}}
-                </p>
-                <p class="daily_low">
-                    {{convertUnits(day.min)}}
-                </p>
+                <DisplayMaxMinTemps :max="day.max" :min="day.min" :unit="unit"/>
             </article>  
         </div>
     </section>
@@ -104,18 +97,6 @@
         line-height: 120%;
         font-weight: medium;
         margin: auto;
-    }
-
-    .daily_high{
-        grid-column: 1/2;
-        grid-row: 3/4;
-        justify-self: start;
-    }
-
-    .daily_low{
-        grid-column: 2/3;
-        grid-row: 3/4;
-        justify-self: end;
     }
 
     @media(max-width: 840px){

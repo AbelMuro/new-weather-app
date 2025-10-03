@@ -1,11 +1,12 @@
 <script setup>
     import useWeatherStore from '@/Store';
-    import {computed} from 'vue';
+    import {ref, watch, computed} from 'vue';
     import {storeToRefs} from 'pinia';
     import icons from '@/assets/icons';
 
     const store = useWeatherStore();
-    const {location, current_temp, condition} = storeToRefs(store);
+    const {location, current_temp, condition, units} = storeToRefs(store);
+    const temperature = ref(current_temp.value);    
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const date = new Date()
@@ -14,6 +15,17 @@
     const dayOfMonth = date.getDate();
     const year = date.getFullYear();
     const fullDate = `${week[dayOfWeek - 1]}, ${months[month]} ${dayOfMonth}, ${year}`;
+
+    const unit = computed(() => {
+        return units.value.temp;
+    })
+
+    watch(unit, (tempUnit) => {
+        if(tempUnit === 'fahrenheit')
+            temperature.value = ((Number(temperature.value) * 1.8) + 32).toFixed(0);
+        else
+            temperature.value = (((Number(temperature.value) - 32)*5)/9).toFixed(0);
+    }, {flush: 'post'})
 
 </script>
 
@@ -30,7 +42,7 @@
         <section class="summary_temp">
             <img class="summary_icon" :src="icons[condition]"/>
             <strong class="summary_degree">
-                {{current_temp}}°
+                {{temperature}}°
             </strong>
         </section>
     </article>

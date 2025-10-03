@@ -2,19 +2,26 @@
     import useWeatherStore from '@/Store';
     import {storeToRefs} from 'pinia';
     import {ref, computed, watch} from 'vue';
+    import DisplayTemp from './DisplayTemp';
     import icons from '@/assets/icons';
 
     const forecast = ref([]);
 
     const store = useWeatherStore();
-    const {hourly_forecast} = storeToRefs(store);
+    const {hourly_forecast, units} = storeToRefs(store);
+
+    const unit = computed(() => {
+        return units.value.temp;
+    })
+
     const currentDay = computed(() => {
         return hourly_forecast.value.current_day;
     });
 
     watch([currentDay, hourly_forecast], ([currentDay, hourlyForecast]) => {
-        forecast.value = hourlyForecast[currentDay]
+        forecast.value = hourlyForecast[currentDay];
     }, {flush: 'post', deep: true, immediate: true})
+
 
 </script>
 
@@ -24,9 +31,7 @@
             <img class="temp_icon" :src="icons[hour.condition]">
             {{hour.hour}}
         </div>
-        <p class="temp_degree">
-            {{`${hour.temp} ${hour.unit}`}}
-        </p>
+        <DisplayTemp :temp="hour.temp" :unit="unit"/>
     </div>
 </template>
 
@@ -61,11 +66,4 @@
         height: 40px;
     }
 
-    .temp_degree{
-        font-family: 'dm sans';
-        color: white;
-        font-size: 1rem;
-        line-height: 120%;
-        font-weight: medium;
-    }
 </style>

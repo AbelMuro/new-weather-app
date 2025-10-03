@@ -11,8 +11,8 @@
     const precipitation = ref('precipitation');
     const open = ref(false);
     const store = useWeatherStore();
-    const {wind, current_temp} = storeToRefs(store);
-    const {convertTempUnits, convertSpeedUnits, setWindSpeedUnits, setTempUnits} = store;
+    const {wind_speed, current_temp} = storeToRefs(store);
+    const {setWindSpeedUnits, setTempUnits} = store;
 
     const handleClick = (e) => {
         if(e.target.classList.contains('units')) return;
@@ -35,19 +35,17 @@
 
     const handleOpen = () => {
         if(!current_temp.value) return
-        if(!wind.value.speed) return;
+        if(!wind_speed.value) return;
         open.value = !open.value;
     }
 
     watch(temp, (temp) => {
         setTempUnits(temp);
-        //convertTempUnits(temp); 
-    }, {flush: 'post'})
+    }, {flush: 'post', immediate: true});
 
     watch(speed, (speed) => {
         setWindSpeedUnits(speed);
-        //convertSpeedUnits(speed);
-    }, {flush: 'post'})
+    }, {flush: 'post', immediate: true});
 
     onMounted(() => {
         document.addEventListener('click', handleClick) 

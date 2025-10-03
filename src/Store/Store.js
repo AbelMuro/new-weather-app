@@ -44,13 +44,10 @@ const useWeatherStore = defineStore('weather', {
         feels_like: '',
         humidity: '',
         units: {
-            wind_speed: '',
-            temp: ''
+            wind_speed: 'km/h',
+            temp: 'celsius'
         },
-        wind: {
-            speed: 0,
-            units: ''
-        },
+        wind_speed: 0,
         precipitation: '',
         hourly_forecast: {
             current_day: 'Monday',
@@ -80,8 +77,7 @@ const useWeatherStore = defineStore('weather', {
             this.location = weather.displayName;
             this.current_temp = current.temperature_2m;
             this.date = new Date(current.time);
-            this.wind.speed = current.wind_speed_10m;
-            this.wind.units = units.wind_speed_10m;  
+            this.wind_speed = current.wind_speed_10m;
             for(let i = 0; i < hourly.temperature_2m.length; i++){
                 const date = new Date(hourly.time[i]);
                 const day = days[date.getDay()];
@@ -121,59 +117,6 @@ const useWeatherStore = defineStore('weather', {
         },
         setLoading(isLoading){
             this.loading = isLoading;
-        },
-        convertTempUnits(temp) {
-            if(!this.current_temp) return;
-            if(temp === 'fahrenheit'){
-                this.current_temp = ((this.current_temp * 1.8) + 32).toFixed(1);
-                this.feels_like = ((this.feels_like * 1.8) + 32).toFixed(1);
-                for(let [day, temp] of Object.entries(this.hourly_forecast)){
-                    if(day === 'current_day') continue;
-                    for(let i = 0; i < temp.length; i++){
-                        const temperature = temp[i].temp;
-                        this.hourly_forecast[day][i].unit = 'F'
-                        this.hourly_forecast[day][i].temp = ((temperature * 1.8) + 32).toFixed(1);
-                    }                    
-                }
-
-                for(let i = 0; i < this.daily_forecast.length; i++){
-                    const max = this.daily_forecast[i].max;
-                    const min = this.daily_forecast[i].min;
-                    this.daily_forecast[i].max = ((max * 1.8) + 32).toFixed(1);
-                    this.daily_forecast[i].min = ((min * 1.8) + 32).toFixed(1);
-                }
-            }
-            else{
-                this.current_temp = ((this.current_temp - 32) / (9/5)).toFixed(1);
-                this.feels_like = ((this.feels_like - 32) / (9/5)).toFixed(1);
-                for(let [day, temp] of Object.entries(this.hourly_forecast)){
-                    if(day === 'current_day') continue;
-                    for(let i = 0; i < temp.length; i++){
-                        const temperature = temp[i].temp;
-                        this.hourly_forecast[day][i].unit = 'C';
-                        this.hourly_forecast[day][i].temp = ((temperature - 32) / (9/5)).toFixed(1);
-                    }                    
-                }
-  
-                for(let i = 0; i < this.daily_forecast.length; i++){
-                    const max = this.daily_forecast[i].max;
-                    const min = this.daily_forecast[i].min;
-                    this.daily_forecast[i].max = ((max - 32) / (9/5)).toFixed(1);
-                    this.daily_forecast[i].min = ((min - 32) / (9/5)).toFixed(1);
-                }
-            }
-        },
-        convertSpeedUnits(speed){
-            if(!this.wind.speed) return;
-
-            if(speed === 'km/h'){
-                this.wind.speed = (this.wind.speed * 1.609344).toFixed(1);
-                this.wind.units = 'km/h';
-            }
-            else{
-                this.wind.speed = (this.wind.speed / 1.609344).toFixed(1);
-                this.wind.units = 'mph';
-            }
         },
         setWindSpeedUnits(unit) {
             this.units.wind_speed = unit;

@@ -4,11 +4,7 @@
     import DisplayTitle from './Components/DisplayTitle';
 
     /* 
-        this is where i left off, i need to continue refactoring the system 
-        i made for the conversion of units of temperature and wind speed for the UnitsButton
-        component
-
-        im currently in the DailyForecast component
+        this is where i left off, i need to fix the rounding for the degree's in the app
     */
 </script>
 

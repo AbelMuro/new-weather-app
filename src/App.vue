@@ -2,10 +2,6 @@
     import HeaderBar from './Components/HeaderBar';
     import Grid from './Components/Grid';
     import DisplayTitle from './Components/DisplayTitle';
-
-    /* 
-        this is where i left off, i need to fix the rounding for the degree's in the app
-    */
 </script>
 
 <template>
